@@ -25,7 +25,7 @@ function App() {
     
     try {
       const response = await axios.get(
-        '/api/twitter/tweet/advanced_search?query="list:1913324634944274707 within_time:10m',
+        '/api/twitter/tweet/advanced_search?query="list:1913324634944274707 within_time:10s',
         { headers: { "X-API-Key": apiToken } }
       )
 
@@ -34,13 +34,11 @@ function App() {
     } catch (err) {
       console.error('Error fetching tweets:', err)
     } 
-  // }, [isPaused, apiToken])
-  }, [apiToken])
+  }, [isPaused, apiToken])
 
   useEffect(() => {
-    fetchUserData()
-    // const interval = setInterval(fetchUserData, 2000)
-    // return () => clearInterval(interval)
+    const interval = setInterval(fetchUserData, 2000)
+    return () => clearInterval(interval)
   }, [fetchUserData])
 
   return (
