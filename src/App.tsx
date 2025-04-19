@@ -4,31 +4,43 @@ import axios from 'axios'
 import Tweet, { ITweet } from './components/Tweet'
 import ApiTokenInput from './components/ApiTokenInput'
 
+export interface IPaused {
+  global: boolean;
+  local: boolean;
+}
+
 function App() {
   const [tweets, setTweets] = useState<ITweet[]>([])
-  const [isPaused, setIsPaused] = useState(false)
+
+  const [isPaused, setIsPaused] = useState<IPaused>({
+    global: false,
+    local: false,
+  });
   const [apiToken, setApiToken] = useState<string>('')
 
+  const paused = isPaused.global || isPaused.local
+
   const fetchUserData = useCallback(async () => {
-    if (isPaused || !apiToken) return
+    if (isPaused.global || isPaused.local || !apiToken) return
     
     try {
       const response = await axios.get(
-        '/api/twitter/tweet/advanced_search?query="list:1913324634944274707 within_time:10s',
+        '/api/twitter/tweet/advanced_search?query="list:1913324634944274707 within_time:10m',
         { headers: { "X-API-Key": apiToken } }
       )
 
       const tweets = response.data.tweets
-      if (tweets.length === 0) setIsPaused(false)
       setTweets(tweets)
     } catch (err) {
       console.error('Error fetching tweets:', err)
     } 
-  }, [isPaused, apiToken])
+  // }, [isPaused, apiToken])
+  }, [apiToken])
 
   useEffect(() => {
-    const interval = setInterval(fetchUserData, 2000)
-    return () => clearInterval(interval)
+    fetchUserData()
+    // const interval = setInterval(fetchUserData, 2000)
+    // return () => clearInterval(interval)
   }, [fetchUserData])
 
   return (
@@ -36,10 +48,10 @@ function App() {
       <div className="app-header">
         <h1>X-Tracker</h1>
         <div
-          className={`status-chip ${isPaused ? 'paused' : 'running'}`}
-          onClick={() => setIsPaused(!isPaused)}
+          className={`status-chip ${paused ? 'paused' : 'running'}`}
+          onClick={() => setIsPaused({ ...isPaused, global: !isPaused.global })}
         >
-          {isPaused ? 'Paused' : 'Running'}
+          {paused ? 'Paused' : 'Running'}
         </div>
       </div>
       
@@ -47,7 +59,7 @@ function App() {
         <div className="tweets-container">
           <h2>Recent Tweets</h2>
           {tweets.map(tweet => (
-            <Tweet key={tweet.id} tweet={tweet} setIsPaused={setIsPaused} />
+            <Tweet key={tweet.id + "tweet"} tweet={tweet} setIsPaused={setIsPaused} isPaused={isPaused} />
           ))}
         </div>
       )}
