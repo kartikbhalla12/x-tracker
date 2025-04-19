@@ -28,6 +28,8 @@ export interface ITweet {
     }[];
   };
   quoted_tweet?: ITweet;
+  isReply?: boolean;
+  inReplyToId?: string;
 }
 
 const parseTweetText = (text: string) => text.split(" ").map((word) => {
@@ -47,10 +49,12 @@ const Tweet = ({
   tweet,
   isPaused,
   setIsPaused,
+  apiToken,
 }: {
   tweet: ITweet;
   isPaused: IPaused;
   setIsPaused: (isPaused: IPaused) => void;
+  apiToken: string;
 }) => {
   const [timer, setTimer] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -71,7 +75,6 @@ const Tweet = ({
   };
 
   const tweetText = parseTweetText(tweet.text);
-  const quotedTweetText = parseTweetText(tweet.quoted_tweet?.text || "");
 
   const [urlPreview, setUrlPreview] = useState<string | null>(null);
 
@@ -87,6 +90,23 @@ const Tweet = ({
     };
     fetchUrlPreview();
   }, [tweet?.entities]);
+
+  const isReply = tweet.isReply
+
+  const [reply, setReply] = useState<ITweet | null>(null);
+
+  useEffect(() => {
+    if (!isReply || !apiToken) return;
+
+    const fetchReply = async () => {
+      const reply = await axios.get(
+          `/api/twitter/tweets?tweet_ids=${[tweet.inReplyToId]}`,
+          { headers: { "X-API-Key": apiToken } }
+        );
+        setReply(reply.data?.tweets?.[0]);
+      };
+    fetchReply();
+  }, [isReply, apiToken,tweet.inReplyToId]);
 
   return (
     <div
@@ -104,7 +124,7 @@ const Tweet = ({
     >
       <div className="tweet-header">
         <img
-          src={tweet.author.profilePicture}
+          src={tweet.author?.profilePicture}
           alt="Profile"
           className="profile-image"
         />
@@ -114,6 +134,41 @@ const Tweet = ({
         </div>
         <div className="tweet-timer">{timer}s</div>
       </div>
+
+      {isReply && reply && (
+        <div 
+          className="replied-to-tweet"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(reply.url, "_blank");
+          }}
+        >
+          <div className="reply-chip">Replied to</div>
+          <div className="replied-to-header">
+            <img
+              src={reply.author?.profilePicture}
+              alt="Profile"
+              className="replied-to-profile-image"
+            />
+            <div className="replied-to-author">
+              <span className="replied-to-name">{reply.author?.name}</span>
+              <span className="replied-to-username">@{reply.author?.userName}</span>
+            </div>
+          </div>
+          <div className="replied-to-content">
+            <p className="replied-to-text">{parseTweetText(reply.text)}</p>
+            {reply.extendedEntities?.media?.map((media, index) => (
+              <div key={media.media_url_https + index + "replied"} className="replied-to-media">
+                <img
+                  src={media.media_url_https}
+                  alt="Media"
+                  className="replied-to-media-image"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="tweet-content">
         <p className="tweet-text">{tweetText}</p>
@@ -142,6 +197,7 @@ const Tweet = ({
               window.open(tweet.quoted_tweet?.url, "_blank");
             }}
           >
+            <div className="reply-chip">Quoted Tweet</div>
             <div className="quoted-tweet-header">
               <img
                 src={tweet.quoted_tweet?.author?.profilePicture}
@@ -154,7 +210,7 @@ const Tweet = ({
               </div>
             </div>
             <div className="quoted-tweet-content">
-              <p className="quoted-tweet-text">{quotedTweetText}</p>
+              <p className="quoted-tweet-text">{parseTweetText(tweet.quoted_tweet?.text || "")}</p>
               {tweet.quoted_tweet?.extendedEntities?.media?.map((media, index) => (
                 <div key={media.media_url_https + index + "quoted"} className="quoted-tweet-media">
                   <img

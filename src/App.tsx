@@ -17,15 +17,16 @@ function App() {
     local: false,
   });
   const [apiToken, setApiToken] = useState<string>('')
+  const [listId, setListId] = useState<string>('')
 
   const paused = isPaused.global || isPaused.local
 
   const fetchUserData = useCallback(async () => {
-    if (isPaused.global || isPaused.local || !apiToken) return
+    if (isPaused.global || isPaused.local || !apiToken || !listId) return
     
     try {
       const response = await axios.get(
-        '/api/twitter/tweet/advanced_search?query="list:1913324634944274707 within_time:10s',
+        `/api/twitter/tweet/advanced_search?query="list:${listId} within_time:10s`,
         { headers: { "X-API-Key": apiToken } }
       )
 
@@ -34,7 +35,7 @@ function App() {
     } catch (err) {
       console.error('Error fetching tweets:', err)
     } 
-  }, [isPaused, apiToken])
+  }, [isPaused, apiToken, listId])
 
   useEffect(() => {
     const interval = setInterval(fetchUserData, 2000)
@@ -57,12 +58,18 @@ function App() {
         <div className="tweets-container">
           <h2>Recent Tweets</h2>
           {tweets.map(tweet => (
-            <Tweet key={tweet.id + "tweet"} tweet={tweet} setIsPaused={setIsPaused} isPaused={isPaused} />
+            <Tweet 
+              key={tweet.id} 
+              tweet={tweet} 
+              setIsPaused={setIsPaused} 
+              isPaused={isPaused} 
+              apiToken={apiToken}
+            />
           ))}
         </div>
       )}
 
-      <ApiTokenInput onTokenUpdate={setApiToken} />
+      <ApiTokenInput onTokenUpdate={setApiToken} onListIdUpdate={setListId} />
     </div>
   )
 }
