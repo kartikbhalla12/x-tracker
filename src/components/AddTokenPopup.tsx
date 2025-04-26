@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './AddTokenPopup.css';
 import { ITweet } from './Tweet';
-import { analyzeTweet, TokenAnalysis } from '../services/openai';
+import { analyzeTweet } from '../services/openai';
 
 interface AddTokenPopupProps {
   isOpen: boolean;
