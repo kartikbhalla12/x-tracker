@@ -94,11 +94,11 @@ const Tweet = ({
 
     const fetchUrlPreview = async () => {
       const urlPreview = await axios.get(
-        `https://api.dub.co/metatags?url=${url}`
+        `https://metadata.kartikbhalla.dev/metadata?url=${url}`
       );
 
       // console.log('urlPreview', urlPreview.data);
-      setUrlPreview(urlPreview.data.image);
+      setUrlPreview(urlPreview.data.ogImage);
     };
     fetchUrlPreview();
   }, [tweet?.entities]);
