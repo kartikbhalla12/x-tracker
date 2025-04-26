@@ -3,16 +3,19 @@ import { useState, useEffect } from 'react';
 interface ApiTokenInputProps {
   onTokenUpdate: (token: string) => void;
   onListIdUpdate: (listId: string) => void;
+  onOpenAIKeyUpdate: (key: string) => void;
 }
 
-const ApiTokenInput = ({ onTokenUpdate, onListIdUpdate }: ApiTokenInputProps) => {
+const ApiTokenInput = ({ onTokenUpdate, onListIdUpdate, onOpenAIKeyUpdate }: ApiTokenInputProps) => {
   const [token, setToken] = useState('');
   const [listId, setListId] = useState('');
+  const [openAIKey, setOpenAIKey] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const savedToken = localStorage.getItem('twitter_api_token');
     const savedListId = localStorage.getItem('twitter_list_id');
+    const savedOpenAIKey = localStorage.getItem('openai_api_key');
     if (savedToken) {
       setToken(savedToken);
       onTokenUpdate(savedToken);
@@ -21,14 +24,20 @@ const ApiTokenInput = ({ onTokenUpdate, onListIdUpdate }: ApiTokenInputProps) =>
       setListId(savedListId);
       onListIdUpdate(savedListId);
     }
-  }, [onTokenUpdate, onListIdUpdate]);
+    if (savedOpenAIKey) {
+      setOpenAIKey(savedOpenAIKey);
+      onOpenAIKeyUpdate(savedOpenAIKey);
+    }
+  }, [onTokenUpdate, onListIdUpdate, onOpenAIKeyUpdate]);
 
   const handleUpdate = () => {
-    if (!token.trim()) return;
+    if (!token.trim() || !listId.trim() || !openAIKey.trim()) return;
     localStorage.setItem('twitter_api_token', token);
     localStorage.setItem('twitter_list_id', listId);
+    localStorage.setItem('openai_api_key', openAIKey);
     onTokenUpdate(token);
     onListIdUpdate(listId);
+    onOpenAIKeyUpdate(openAIKey);
 
     setIsExpanded(false);
   };
@@ -72,7 +81,7 @@ const ApiTokenInput = ({ onTokenUpdate, onListIdUpdate }: ApiTokenInputProps) =>
       ) : (
         <div className="api-token-input">
           <div className="token-input-wrapper">
-            <label className="input-label">API Token</label>
+            <label className="input-label">Twitter API Token</label>
             <input
               type="text"
               value={token}
@@ -94,11 +103,22 @@ const ApiTokenInput = ({ onTokenUpdate, onListIdUpdate }: ApiTokenInputProps) =>
               className="token-input"
             />
           </div>
+          <div className="token-input-wrapper">
+            <label className="input-label">OpenAI API Key</label>
+            <input
+              type="text"
+              value={openAIKey}
+              onChange={(e) => setOpenAIKey(e.target.value)}
+              onKeyDown={handleKeyPress}
+              placeholder="Enter OpenAI API Key"
+              className="token-input"
+            />
+          </div>
           <div className="button-group">
             <button 
               onClick={handleUpdate} 
               className="update-button"
-              disabled={!token.trim() || !listId.trim()}
+              disabled={!token.trim() || !listId.trim() || !openAIKey.trim()}
             >
               Update
             </button>

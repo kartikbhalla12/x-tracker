@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^22.15.2",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
+    "openai": "^4.96.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

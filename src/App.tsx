@@ -3,6 +3,7 @@ import './App.css'
 import axios from 'axios'
 import Tweet, { ITweet } from './components/Tweet'
 import ApiTokenInput from './components/ApiTokenInput'
+import './services/openai'
 
 export interface IPaused {
   global: boolean;
@@ -18,7 +19,7 @@ function App() {
   });
   const [apiToken, setApiToken] = useState<string>('')
   const [listId, setListId] = useState<string>('')
-
+  const [openAIKey, setOpenAIKey] = useState<string>('')
   const paused = isPaused.global || isPaused.local
 
   const fetchUserData = useCallback(async () => {
@@ -64,12 +65,13 @@ function App() {
               setIsPaused={setIsPaused} 
               isPaused={isPaused} 
               apiToken={apiToken}
+              openAIKey={openAIKey}
             />
           ))}
         </div>
       )}
 
-      <ApiTokenInput onTokenUpdate={setApiToken} onListIdUpdate={setListId} />
+      <ApiTokenInput onTokenUpdate={setApiToken} onListIdUpdate={setListId} onOpenAIKeyUpdate={setOpenAIKey} />
     </div>
   )
 }
