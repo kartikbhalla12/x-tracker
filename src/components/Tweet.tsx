@@ -94,7 +94,7 @@ const Tweet = ({
 
     const fetchUrlPreview = async () => {
       const urlPreview = await axios.get(
-        `https://metadata.kartikbhalla.dev/metadata?url=${url}`
+        `https://metadata-node.onrender.com/metadata?url=${url}`
       );
 
       // console.log('urlPreview', urlPreview.data);
