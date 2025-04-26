@@ -94,7 +94,7 @@ const Tweet = ({
 
     const fetchUrlPreview = async () => {
       const urlPreview = await axios.get(
-        `https://metadata-node.onrender.com/metadata?url=${url}`
+        `http://13.51.174.225:3001/metadata?url=${url}`
       );
 
       // console.log('urlPreview', urlPreview.data);
