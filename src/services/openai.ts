@@ -19,8 +19,13 @@ export const loadPromptFromGoogleDocs = async (docId: string): Promise<string> =
   }
 }; 
 
-const initialPrompt = await loadPromptFromGoogleDocs('1yfjlNdcZjR8V1jxKFHboRFOqdKTMhnFIG45bKPO-oeo');
-// console.log('prompt', prompt);
+let initialPrompt: string | null = null;
+
+const loadInitialPrompt = async () => {
+  initialPrompt = await loadPromptFromGoogleDocs('1yfjlNdcZjR8V1jxKFHboRFOqdKTMhnFIG45bKPO-oeo');
+}
+
+loadInitialPrompt();
 
 
 
