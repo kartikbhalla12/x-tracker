@@ -27,7 +27,7 @@ function App() {
     
     try {
       const response = await axios.get(
-        `/api/twitter/tweet/advanced_search?query="list:${listId} within_time:10s`,
+        `/api/twitter/tweet/advanced_search?query="list:${listId} within_time:10m`,
         { headers: { "X-API-Key": apiToken } }
       )
 
@@ -39,8 +39,9 @@ function App() {
   }, [isPaused, apiToken, listId])
 
   useEffect(() => {
-    const interval = setInterval(fetchUserData, 2000)
-    return () => clearInterval(interval)
+    // const interval = setInterval(fetchUserData, 2000)
+    // return () => clearInterval(interval)
+    fetchUserData()
   }, [fetchUserData])
 
   return (

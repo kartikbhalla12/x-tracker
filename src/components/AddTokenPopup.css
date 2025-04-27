@@ -212,3 +212,38 @@
 .analysis-info p:last-child {
   margin-bottom: 0;
 } 
+
+.token-name-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* position: relative; */
+}
+
+.token-name-input-wrapper input {
+  flex: 1;
+}
+
+.clear-button {
+  /* position: absolute; */
+  background-color: rgba(255,0,0,0.6);
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  
+
+}
+
+.clear-button:hover {
+  background-color: rgba(255,0,0,0.8);
+}
+
+.clear-button svg {
+  width: 1rem;
+  height: 1rem;
+  color: white;
+}

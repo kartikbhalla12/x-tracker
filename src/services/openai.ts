@@ -19,10 +19,10 @@ export const loadPromptFromGoogleDocs = async (docId: string): Promise<string> =
   }
 }; 
 
-let initialPrompt: string | null = null;
+let systemPrompt: string | null = null;
 
 const loadInitialPrompt = async () => {
-  initialPrompt = await loadPromptFromGoogleDocs('1yfjlNdcZjR8V1jxKFHboRFOqdKTMhnFIG45bKPO-oeo');
+  systemPrompt = await loadPromptFromGoogleDocs('1yfjlNdcZjR8V1jxKFHboRFOqdKTMhnFIG45bKPO-oeo');
 }
 
 loadInitialPrompt();
@@ -34,17 +34,38 @@ export const analyzeTweet = async (tweetText: string, tweetImageUrl: string, ope
     apiKey: openAIKey,
     dangerouslyAllowBrowser: true
   });
+
+  console.log('tweetText', tweetText);
+  console.log('tweetImageUrl', tweetImageUrl);
   
-  const prompt = `${initialPrompt} 
-Tweet: ${tweetText}
-Image URL: ${tweetImageUrl}`;
+  const customPrompt = `
+  ${systemPrompt}
+  
+  Analyze the following tweet and attached image URL carefully and return a JSON object with the token name and ticker.
+    Tweet: ${tweetText || "[No tweet text provided]"}
+    Image URL: ${tweetImageUrl || "[No image URL provided]"}
+  `;
+
+  if (!systemPrompt) {
+    console.error('System prompt not loaded');
+    return null;
+  }
 
   try {
     const completion = await openai.chat.completions.create({
       messages: [
         {
           role: "user",
-          content: prompt
+          content: [
+            {
+              type: "text",
+              text: customPrompt
+            },
+            {
+              type: "image_url",
+              image_url: {url: tweetImageUrl}
+            }
+          ]
         }
       ],
       model: "gpt-4o",

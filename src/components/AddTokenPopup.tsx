@@ -53,6 +53,13 @@ const truncateText = (text: string, maxWords: number = 100) => {
   return words.slice(0, maxWords).join(' ') + '...';
 };
 
+const parseTweetText = (text: string) => text.split(" ").map((word) => {
+  if (word.trim().startsWith("http")) return '';
+  return `${word} `;
+}).join(" ").trim();
+
+
+
 const AddTokenPopup: React.FC<AddTokenPopupProps> = ({ 
   isOpen, 
   onClose, 
@@ -69,13 +76,32 @@ const AddTokenPopup: React.FC<AddTokenPopupProps> = ({
   // const [analysis, setAnalysis] = useState<TokenAnalysis | null>(null);
 
   useEffect(() => {
-    setImageUrl(getTweetImage(tweet, reply, urlPreview) || "");
-  }, [tweet, reply, urlPreview]);
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (isOpen && tweet && openAIKey) {
+    if(!isOpen) return;
+
+    console.log("setting image url")
+    setImageUrl(getTweetImage(tweet, reply, urlPreview) || "");
+  }, [isOpen]);
+
+  useEffect(() => {
+    if(!isOpen || !tweet || !imageUrl || !openAIKey) return;
       setIsLoading(true);
-      analyzeTweet(tweet.text, imageUrl, openAIKey)
+      analyzeTweet(parseTweetText(tweet.text), imageUrl, openAIKey)
         .then(result => {
           if (result) {
             // console.log('result', result);
@@ -90,8 +116,7 @@ const AddTokenPopup: React.FC<AddTokenPopupProps> = ({
         .finally(() => {
           setIsLoading(false);
         });
-    }
-  }, [isOpen, tweet, imageUrl, openAIKey]);
+  }, [isOpen, imageUrl]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,29 +161,55 @@ const AddTokenPopup: React.FC<AddTokenPopupProps> = ({
           <form onSubmit={handleSubmit} className="token-form">
             <div className="form-group">
               <label htmlFor="name">Token Name</label>
+              <div className="token-name-input-wrapper">
               <input
                 type="text"
                 id="name"
                 value={name}
-                onFocus={() => setName("")}
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Enter token name"
                 disabled={isLoading}
               />
+              {name && (
+                <button 
+                  type="button" 
+                  className="clear-button"
+                  onClick={() => setName('')}
+                  disabled={isLoading}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                )}
+              </div>
             </div>
             <div className="form-group">
               <label htmlFor="ticker">Ticker Symbol</label>
+              <div className="token-name-input-wrapper">
               <input
                 type="text"
                 id="ticker"
                 value={ticker}
-                onFocus={() => setTicker("")}
                 onChange={(e) => setTicker(e.target.value)}
                 required
                 placeholder="Enter ticker symbol"
                 disabled={isLoading}
               />
+              {ticker && (
+                <button 
+                  type="button" 
+                  className="clear-button"
+                  onClick={() => setTicker('')}
+                  disabled={isLoading}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              )}
+              </div>
             </div>
             <div className="form-group">
               <label htmlFor="imageUrl">Image URL</label>
