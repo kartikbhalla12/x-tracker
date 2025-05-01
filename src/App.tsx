@@ -1,79 +1,88 @@
-import { useCallback, useEffect, useState } from 'react'
-import './App.css'
-import axios from 'axios'
-import Tweet, { ITweet } from './components/Tweet'
-import ApiTokenInput from './components/ApiTokenInput'
-import './services/openai'
+import { useEffect, useState } from "react";
 
-export interface IPaused {
-  global: boolean;
-  local: boolean;
-}
+import Settings from "@/components/Settings";
+import TweetContainer from "@/components/TweetContainer";
+import Header from "@/components/Header";
+
+import useWebSockets from "@/hooks/useWebSockets";
+
+import styles from "@/app.module.css";
+
+import {
+  IApiSettings,
+  ILaunchSettings,
+  IPaused,
+} from "@/interfaces/index.interface";
+
 
 function App() {
-  const [tweets, setTweets] = useState<ITweet[]>([])
-
   const [isPaused, setIsPaused] = useState<IPaused>({
     global: false,
     local: false,
   });
-  const [apiToken, setApiToken] = useState<string>('')
-  const [listId, setListId] = useState<string>('')
-  const [openAIKey, setOpenAIKey] = useState<string>('')
-  const paused = isPaused.global || isPaused.local
 
-  const fetchUserData = useCallback(async () => {
-    if (isPaused.global || isPaused.local || !apiToken || !listId) return
-    
-    try {
-      const response = await axios.get(
-        `/api/twitter/tweet/advanced_search?query="list:${listId} within_time:10s`,
-        { headers: { "X-API-Key": apiToken } }
-      )
+  const [apiSettings, setApiSettings] = useState<IApiSettings>({
+    apiToken: "",
+    listId: "",
+    openAIKey: "",
+  });
 
-      const tweets = response.data.tweets
-      setTweets(tweets)
-    } catch (err) {
-      console.error('Error fetching tweets:', err)
-    } 
-  }, [isPaused, apiToken, listId])
+  const [launchSettings, setLaunchSettings] = useState<ILaunchSettings>({
+    walletPublicKey: "",
+    walletPrivateKey: "",
+    defaultBuyAmount: "",
+    tokenKey: "",
+  });
+
+  const { tweets, pause, resume } = useWebSockets({
+    listId: apiSettings.listId,
+    apiToken: apiSettings.apiToken,
+  });
+
+  const paused = isPaused.global || isPaused.local;
 
   useEffect(() => {
-    const interval = setInterval(fetchUserData, 2000)
-    return () => clearInterval(interval)
-  }, [fetchUserData])
+    if (paused) pause();  
+    else resume();
+  }, [paused, pause, resume]);
 
   return (
-    <div className="app">
-      <div className="app-header">
-        <h1>X-Tracker</h1>
-        <div
-          className={`status-chip ${paused ? 'paused' : 'running'}`}
-          onClick={() => setIsPaused({ ...isPaused, global: !isPaused.global })}
-        >
-          {paused ? 'Paused' : 'Running'}
-        </div>
-      </div>
-      
+    <div className={styles.app}>
+      <Header
+        paused={paused}
+        onPauseToggle={() =>
+          setIsPaused({ ...isPaused, global: !isPaused.global })
+        }
+      />
+
       {tweets.length > 0 && (
         <div className="tweets-container">
-          <h2>Recent Tweets</h2>
-          {tweets.map(tweet => (
-            <Tweet 
-              key={tweet.id} 
-              tweet={tweet} 
-              setIsPaused={setIsPaused} 
-              isPaused={isPaused} 
-              apiToken={apiToken}
-              openAIKey={openAIKey}
+          {tweets.map((tweet) => (
+            <TweetContainer
+              key={tweet.id}
+              tweet={tweet}
+              isPaused={isPaused}
+              onLocalPauseChange={(paused) =>
+                setIsPaused({ ...isPaused, local: paused })
+              }
+              onGlobalPauseChange={(paused) =>
+                setIsPaused({ ...isPaused, global: paused })
+              }
+              openAIKey={apiSettings.openAIKey}
+              launchSettings={launchSettings}
             />
           ))}
         </div>
       )}
 
-      <ApiTokenInput onTokenUpdate={setApiToken} onListIdUpdate={setListId} onOpenAIKeyUpdate={setOpenAIKey} />
+      <Settings
+        apiSettingsConfig={apiSettings}
+        setApiSettingsConfig={setApiSettings}
+        launchSettingsConfig={launchSettings}
+        setLaunchSettingsConfig={setLaunchSettings}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

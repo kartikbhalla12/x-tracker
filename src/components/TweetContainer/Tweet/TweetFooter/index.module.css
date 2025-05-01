@@ -1,0 +1,68 @@
+.tweetFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #71767b;
+  font-size: 0.85rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #2f3336;
+}
+
+
+.tweetLink {
+  color: #1d9bf0;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tweetLink:hover {
+  text-decoration: underline;
+}
+
+.tweetLink::after {
+  content: "→";
+  font-size: 0.9em;
+  transition: transform 0.2s;
+}
+
+.tweetLink:hover::after {
+  transform: translateX(2px);
+}
+
+.tweetActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+
+.copyButton {
+  background: none;
+  border: none;
+  color: #71767b;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.copyButton:hover {
+  background-color: rgba(29, 155, 240, 0.1);
+  color: #1d9bf0;
+}
+
+.copyIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.copyButton.copied {
+  color: #00ba7c;
+}

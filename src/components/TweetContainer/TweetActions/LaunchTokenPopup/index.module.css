@@ -1,4 +1,4 @@
-.popup-overlay {
+.popupOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,11 +11,11 @@
   z-index: 1000;
 }
 
-.popup-content {
+.popupContent {
   background-color: #000;
   border-radius: 16px;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   padding: 24px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #2f3336;
@@ -23,24 +23,33 @@
   gap: 24px;
 }
 
-.popup-left {
+.formContainer {
+  display: flex;
+  /* justify-content: space-between; */
+
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popupLeft {
   flex: 1;
   border-right: 1px solid #2f3336;
   padding-right: 24px;
 }
 
-.popup-right {
+.popupRight {
   flex: 1;
+  display: flex;
 }
 
-.tweet-preview {
+.tweetPreview {
   background-color: rgba(255, 255, 255, 0.02);
   border-radius: 8px;
   padding: 16px;
   margin-top: 16px;
 }
 
-.tweet-preview p {
+.tweetPreview p {
   color: #fff;
   font-size: 14px;
   line-height: 1.5;
@@ -48,7 +57,13 @@
   margin-bottom: 16px;
 }
 
-.tweet-preview-image {
+.tweetPreview a {
+  color: #1d9bf0;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.tweetPreviewImage {
   width: 100%;
   max-height: 300px;
   object-fit: contain;
@@ -56,21 +71,21 @@
   margin-top: 16px;
 }
 
-.popup-header {
+.popupHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 }
 
-.popup-header h2 {
+.popupHeader h2 {
   color: #fff;
   font-size: 20px;
   font-weight: 700;
   margin: 0;
 }
 
-.close-button {
+.closeButton {
   background: none;
   border: none;
   color: #71767b;
@@ -83,29 +98,31 @@
   transition: background-color 0.2s;
 }
 
-.close-button:hover {
+.closeButton:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.token-form {
+.tokenForm {
+  flex: 1;
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  gap: 16px;
+
 }
 
-.form-group {
+.formGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-group label {
+.formGroup label {
   color: #fff;
   font-size: 14px;
   font-weight: 500;
 }
 
-.form-group input {
+.formGroup input {
   background-color: transparent;
   border: 1px solid #2f3336;
   border-radius: 4px;
@@ -115,23 +132,23 @@
   transition: border-color 0.2s;
 }
 
-.form-group input:focus {
+.formGroup input:focus {
   outline: none;
   border-color: #1d9bf0;
 }
 
-.form-group input::placeholder {
+.formGroup input::placeholder {
   color: #71767b;
 }
 
-.form-actions {
+.formActions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   margin-top: 16px;
 }
 
-.cancel-button {
+.cancelButton {
   background-color: transparent;
   border: 1px solid #2f3336;
   color: #fff;
@@ -142,11 +159,11 @@
   transition: background-color 0.2s;
 }
 
-.cancel-button:hover {
+.cancelButton:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.submit-button {
+.submitButton {
   background-color: #1d9bf0;
   border: none;
   color: #fff;
@@ -157,16 +174,16 @@
   transition: background-color 0.2s;
 }
 
-.submit-button:hover {
+.submitButton:hover {
   background-color: #1a8cd8;
 }
 
-.submit-button:disabled {
+.submitButton:disabled {
   background-color: #8899a6;
   cursor: not-allowed;
 }
 
-.loading-overlay {
+.loadingOverlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -180,7 +197,7 @@
   z-index: 1;
 }
 
-.loading-spinner {
+.loadingSpinner {
   width: 40px;
   height: 40px;
   border: 3px solid #2f3336;
@@ -195,37 +212,35 @@
   }
 }
 
-.analysis-info {
+.analysisInfo {
   background-color: rgba(29, 155, 240, 0.1);
   border-radius: 8px;
   padding: 12px;
   margin-top: 16px;
 }
 
-.analysis-info p {
+.analysisInfo p {
   color: #fff;
   font-size: 14px;
   margin: 0;
   margin-bottom: 8px;
 }
 
-.analysis-info p:last-child {
+.analysisInfo p:last-child {
   margin-bottom: 0;
 } 
 
-.token-name-input-wrapper {
+.tokenNameInputWrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  /* position: relative; */
 }
 
-.token-name-input-wrapper input {
+.tokenNameInputWrapper input {
   flex: 1;
 }
 
-.clear-button {
-  /* position: absolute; */
+.clearButton {
   background-color: rgba(255,0,0,0.6);
   height: 2rem;
   width: 2rem;
@@ -233,17 +248,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  
-
 }
 
-.clear-button:hover {
+.clearButton:hover {
   background-color: rgba(255,0,0,0.8);
 }
 
-.clear-button svg {
+.clearButton svg {
   width: 1rem;
   height: 1rem;
   color: white;
+}
+
+:global(.launchImageContainer) {
+  width: 400px !important;
+  height: 300px !important;
 }

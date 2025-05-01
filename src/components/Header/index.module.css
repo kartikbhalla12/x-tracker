@@ -1,0 +1,32 @@
+.appHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #2f3336;
+  margin-bottom: 1rem;
+  width: 1200px;
+}
+
+.statusChip {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.statusChip.running {
+  background-color: rgba(29, 155, 240, 0.1);
+  color: #1d9bf0;
+}
+
+.statusChip.paused {
+  background-color: rgba(244, 33, 46, 0.1);
+  color: #f4212e;
+}
+
+.statusChip:hover {
+  opacity: 0.9;
+}
