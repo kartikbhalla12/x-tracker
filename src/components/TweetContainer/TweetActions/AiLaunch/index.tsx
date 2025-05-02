@@ -6,7 +6,7 @@ import { launchToken } from "@/services/launchToken";
 import { getImageUrlToAnalyze } from "@/utils/tweet";
 
 import LaunchTokenPopup from "@/components/TweetContainer/TweetActions/LaunchTokenPopup";
-import styles from "@/components/TweetContainer/TweetActions/AILaunch/index.module.css";
+import styles from "@/components/TweetContainer/TweetActions/AiLaunch/index.module.css";
 
 import {
   IAnalysis,
