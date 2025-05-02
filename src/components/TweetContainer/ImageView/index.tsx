@@ -1,19 +1,18 @@
 import { FC } from "react";
 
-import styles from "@/components/TweetContainer/Tweet/ImageView/index.module.css";
+import styles from "@/components/TweetContainer/ImageView/index.module.css";
 
 interface ImageViewProps {
   images: string[];
   alt?: string;
-  className?: string;
 }
 
-const ImageView: FC<ImageViewProps> = ({ images, alt = "", className}) => {
+const ImageView: FC<ImageViewProps> = ({ images, alt = "" }) => {
   if (!images || images.length === 0) return null;
 
   if (images.length === 1) {
     return (
-      <div className={`${styles.imageContainer} ${className}`}>
+      <div className={styles.imageContainer}>
         <img
           src={images[0]}
           alt={alt}
@@ -27,7 +26,7 @@ const ImageView: FC<ImageViewProps> = ({ images, alt = "", className}) => {
   const displayImages = images.slice(0, 4);
 
   return (
-    <div className={`${styles.imageContainer} ${className}`}>
+    <div className={styles.imageContainer}>
       <div
         className={styles.multiImageContainer}
         data-count={displayImages.length}

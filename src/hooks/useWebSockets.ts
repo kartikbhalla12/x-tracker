@@ -1,29 +1,31 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-import { ITweet } from "@/interfaces/index.interface";
+import { IApiSettings, ITweet } from "@/interfaces/index.interface";
 
 import environment from "@/constants/environment";
+import { STORAGE_KEYS } from "@/constants/storage";
+import { DEFAULT_API_SETTINGS } from "@/constants/defaults";
 
-interface IUseWebSocketsProps {
-  listId: string;
-  apiToken: string;
-}
+import storage from "@/utils/storage";
 
-const useWebSockets = ({ listId, apiToken }: IUseWebSocketsProps) => {
+const useWebSockets = () => {
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   const currentTweetMapRef = useRef<Map<string, ITweet>>(new Map());
 
   useEffect(() => {
-    if (!listId || !apiToken) return;
+    const apiSettings =
+      storage.get<IApiSettings>(STORAGE_KEYS.API_SETTINGS) ||
+      DEFAULT_API_SETTINGS;
+
+    if (!apiSettings.listId || !apiSettings.apiToken) return;
 
     const ws = new WebSocket(
-      `${environment.websocketUrl}?twitter-list-id=${listId}&twitter-api-key=${apiToken}`
+      `${environment.websocketUrl}?twitter-list-id=${apiSettings.listId}&twitter-api-key=${apiSettings.apiToken}`
     );
 
     setSocket(ws);
-
     ws.onopen = () => console.log("Connected to WebSocket");
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
@@ -31,30 +33,40 @@ const useWebSockets = ({ listId, apiToken }: IUseWebSocketsProps) => {
       if (message.type === "tweet") {
         const latestTweets: ITweet[] = message.data;
 
-        const newTweetMap = new Map(latestTweets.map(t => [t.id, t]));
+        const newTweetMap = new Map(latestTweets.map((t) => [t.id, t]));
         const prevTweetMap = currentTweetMapRef.current;
 
         const changed = [];
 
         for (const [id, tweet] of newTweetMap) {
-          if (!prevTweetMap.has(id) || prevTweetMap.get(id)?.text !== tweet.text) {
+          if (
+            !prevTweetMap.has(id) ||
+            prevTweetMap.get(id)?.text !== tweet.text
+          ) {
             changed.push(tweet);
           }
         }
 
-        const removed = [...prevTweetMap.keys()].filter(id => !newTweetMap.has(id));
+        const removed = [...prevTweetMap.keys()].filter(
+          (id) => !newTweetMap.has(id)
+        );
 
         if (changed.length > 0 || removed.length > 0) {
           currentTweetMapRef.current = newTweetMap;
           setTweets([...newTweetMap.values()]);
         }
+      } else if (message.type === "tweet-error") {
+        alert("Error fetching tweets. Check your credits.");
       }
     };
 
     ws.onclose = () => console.log("Disconnected from WebSocket");
+    ws.onerror = () => alert("Failed to connect to WebSocket");
 
-    return ws.close;
-  }, [listId, apiToken]);
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   const pause = useCallback(() => {
     if (!socket || socket.readyState !== WebSocket.OPEN) return;

@@ -1,0 +1,24 @@
+.launchButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #EEE4B1;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  width: 200px;
+  height: 100px;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.launchIcon {
+  width: 16px;
+  height: 16px;
+}

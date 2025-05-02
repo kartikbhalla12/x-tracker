@@ -21,7 +21,7 @@ export const launchToken = async ({
   twitterUrl,
   tokenKey,
   buyAmount,
-  imageUrl
+  imageUrl,
 }: ILaunchToken) => {
   try {
     const response = await axios.post(`${environment.apiUrl}/launch`, {
@@ -32,17 +32,13 @@ export const launchToken = async ({
       twitterUrl,
       imageUrl,
       tokenKey,
-      buyAmount
+      buyAmount,
     });
 
     return response.data;
   } catch (error) {
     console.error(error);
+    alert("Failed to launch token");
     return null;
   }
 };
-
-
-
-
-

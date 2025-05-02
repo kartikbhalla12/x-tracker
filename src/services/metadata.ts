@@ -10,9 +10,12 @@ interface IMetaDataResponse {
 
 export const getMetadata = async (url: string) => {
   try {
-    const response = await axios.get<IMetaDataResponse>(`${environment.apiUrl}/metadata`, {
-      params: { url },
-    });
+    const response = await axios.get<IMetaDataResponse>(
+      `${environment.apiUrl}/metadata`,
+      {
+        params: { url },
+      }
+    );
 
     return response.data?.metadata || null;
   } catch (error) {

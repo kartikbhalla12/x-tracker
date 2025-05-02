@@ -4,16 +4,14 @@ import * as Yup from "yup";
 
 import styles from "@/components/Settings/index.module.css";
 
-import storage, { STORAGE_KEYS } from "@/utils/storage";
+import storage from "@/utils/storage";
+
+import { STORAGE_KEYS } from "@/constants/storage";
+import { DEFAULT_LAUNCH_SETTINGS } from "@/constants/defaults";
 
 import Zap from "@/icons/Zap";
 
 import { ILaunchSettings } from "@/interfaces/index.interface";
-
-interface LaunchSettingsProps {
-  config: ILaunchSettings;
-  setConfig: (config: ILaunchSettings) => void;
-}
 
 const validationSchema = Yup.object().shape({
   walletPublicKey: Yup.string().required("Wallet Public Key is required"),
@@ -22,13 +20,16 @@ const validationSchema = Yup.object().shape({
   tokenKey: Yup.string().required("Token Key is required"),
 });
 
-const LaunchSettings: FC<LaunchSettingsProps> = ({ config, setConfig }) => {
+const LaunchSettings: FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const config =
+    storage.get<ILaunchSettings>(STORAGE_KEYS.LAUNCH_SETTINGS) ||
+    DEFAULT_LAUNCH_SETTINGS;
 
   const handleSubmit = (values: ILaunchSettings) => {
     storage.set(STORAGE_KEYS.LAUNCH_SETTINGS, values);
-    setConfig(values);
-    setIsExpanded(false);
+    window.location.reload();
   };
 
   if (!isExpanded)

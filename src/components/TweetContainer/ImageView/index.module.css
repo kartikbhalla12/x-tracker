@@ -1,0 +1,70 @@
+.imageContainer {
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.singleImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 1rem;
+}
+
+.multiImageContainer {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  height: 300px;
+}
+
+.multiImage {
+  object-fit: cover;
+  width: 100%;
+}
+
+/* Two images layout */
+.multiImageContainer[data-count="2"] {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.multiImageContainer[data-count="2"] .multiImage {
+  height: 300px;
+}
+
+/* Three images layout */
+.multiImageContainer[data-count="3"] {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.multiImageContainer[data-count="3"] .multiImage {
+  height: 150px;
+}
+
+.multiImageContainer[data-count="3"] .multiImage:nth-child(1) {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  height: 300px;
+}
+
+.multiImageContainer[data-count="3"] .multiImage:nth-child(2) {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+.multiImageContainer[data-count="3"] .multiImage:nth-child(3) {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+/* Four images layout */
+.multiImageContainer[data-count="4"] {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.multiImageContainer[data-count="4"] .multiImage {
+  height: 150px;
+}

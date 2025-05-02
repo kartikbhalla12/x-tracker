@@ -22,7 +22,7 @@ export const getImageUrlToAnalyze = async (tweet: ITweet) => {
   if (tweet.attachedMedia?.length) return tweet.attachedMedia[0];
   if (tweet.attachedUrl) {
     const metadata = await getMetadata(tweet.attachedUrl);
-    if (metadata) return metadata.ogImage;
+    if (metadata) return metadata.ogImage || metadata.twitterImage;
   }
 
   if (tweet.inReplyToTweet && tweet.inReplyToTweet.attachedMedia?.length)

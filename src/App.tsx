@@ -8,12 +8,7 @@ import useWebSockets from "@/hooks/useWebSockets";
 
 import styles from "@/app.module.css";
 
-import {
-  IApiSettings,
-  ILaunchSettings,
-  IPaused,
-} from "@/interfaces/index.interface";
-
+import { IPaused } from "@/interfaces/index.interface";
 
 function App() {
   const [isPaused, setIsPaused] = useState<IPaused>({
@@ -21,28 +16,12 @@ function App() {
     local: false,
   });
 
-  const [apiSettings, setApiSettings] = useState<IApiSettings>({
-    apiToken: "",
-    listId: "",
-    openAIKey: "",
-  });
-
-  const [launchSettings, setLaunchSettings] = useState<ILaunchSettings>({
-    walletPublicKey: "",
-    walletPrivateKey: "",
-    defaultBuyAmount: "",
-    tokenKey: "",
-  });
-
-  const { tweets, pause, resume } = useWebSockets({
-    listId: apiSettings.listId,
-    apiToken: apiSettings.apiToken,
-  });
+  const { tweets, pause, resume } = useWebSockets();
 
   const paused = isPaused.global || isPaused.local;
 
   useEffect(() => {
-    if (paused) pause();  
+    if (paused) pause();
     else resume();
   }, [paused, pause, resume]);
 
@@ -68,19 +47,12 @@ function App() {
               onGlobalPauseChange={(paused) =>
                 setIsPaused({ ...isPaused, global: paused })
               }
-              openAIKey={apiSettings.openAIKey}
-              launchSettings={launchSettings}
             />
           ))}
         </div>
       )}
 
-      <Settings
-        apiSettingsConfig={apiSettings}
-        setApiSettingsConfig={setApiSettings}
-        launchSettingsConfig={launchSettings}
-        setLaunchSettingsConfig={setLaunchSettings}
-      />
+      <Settings />
     </div>
   );
 }

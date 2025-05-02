@@ -21,17 +21,21 @@ export const analyzeTweet = async ({
   openAIKey,
 }: IAnalyzeTweet) => {
   try {
-    const response = await axios.post<IAnalyzeResponse>(`${environment.apiUrl}/analyze`, {
-      tweetText: text,
-      tweetImageUrl: imageUrl,
-      openAIKey,
-    });
+    const response = await axios.post<IAnalyzeResponse>(
+      `${environment.apiUrl}/analyze`,
+      {
+        tweetText: text,
+        tweetImageUrl: imageUrl,
+        openAIKey,
+      }
+    );
 
-    console.log(response.data)
+    console.log(response.data);
 
     return response.data?.analysis || null;
   } catch (error) {
     console.error(error);
+    alert("Failed to analyze tweet");
     return null;
   }
 };

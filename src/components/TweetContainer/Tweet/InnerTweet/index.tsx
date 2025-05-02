@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import Chip from "@/components/TweetContainer/Tweet/Chip";
 import styles from "@/components/TweetContainer/Tweet/InnerTweet/index.module.css";
-import ImageView from "@/components/TweetContainer/Tweet/ImageView";
+import ImageView from "@/components/TweetContainer/ImageView";
 
 import { parseTweetText } from "@/utils/tweet";
 

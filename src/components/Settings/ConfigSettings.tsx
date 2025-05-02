@@ -4,16 +4,14 @@ import * as Yup from "yup";
 
 import styles from "@/components/Settings/index.module.css";
 
-import storage, { STORAGE_KEYS } from "@/utils/storage";
+import storage from "@/utils/storage";
 
-import SettingsIcon from "@/icons/Settings";
+import { STORAGE_KEYS } from "@/constants/storage";
+import { DEFAULT_API_SETTINGS } from "@/constants/defaults";
 
 import { IApiSettings } from "@/interfaces/index.interface";
 
-interface ConfigSettingsProps {
-  config: IApiSettings;
-  setConfig: (config: IApiSettings) => void;
-}
+import SettingsIcon from "@/icons/Settings";
 
 const validationSchema = Yup.object().shape({
   apiToken: Yup.string().required("API Token is required"),
@@ -21,13 +19,14 @@ const validationSchema = Yup.object().shape({
   openAIKey: Yup.string().required("OpenAI API Key is required"),
 });
 
-const ConfigSettings: FC<ConfigSettingsProps> = ({ config, setConfig }) => {
+const ConfigSettings: FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const config = storage.get<IApiSettings>(STORAGE_KEYS.API_SETTINGS) || DEFAULT_API_SETTINGS;
 
   const handleSubmit = (values: IApiSettings) => {
     storage.set(STORAGE_KEYS.API_SETTINGS, values);
-    setConfig(values);
-    setIsExpanded(false);
+    window.location.reload();
   };
 
   if (!isExpanded)

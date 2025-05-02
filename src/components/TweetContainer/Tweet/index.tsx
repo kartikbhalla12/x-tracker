@@ -1,15 +1,16 @@
 import { FC } from "react";
 
 import InnerTweet from "@/components/TweetContainer/Tweet/InnerTweet";
-import ImageView from "@/components/TweetContainer/Tweet/ImageView";
+import ImageView from "@/components/TweetContainer/ImageView";
+import TweetTimer from "@/components/TweetContainer/Tweet/TweetTimer";
+import TweetFooter from "@/components/TweetContainer/Tweet/TweetFooter";
 import styles from "@/components/TweetContainer/Tweet/index.module.css";
+
+import useTweetImages from "@/hooks/useTweetImages";
 
 import { parseTweetText } from "@/utils/tweet";
 
 import { InnerTweetType, IPaused, ITweet } from "@/interfaces/index.interface";
-import { TweetFooter } from "@/components/TweetContainer/Tweet/TweetFooter";
-import TweetTimer from "@/components/TweetContainer/Tweet/TweetTimer";
-import { useTweetImages } from "@/hooks/useTweetImages";
 
 interface ITweetProps {
   tweet: ITweet;
@@ -18,10 +19,7 @@ interface ITweetProps {
 }
 
 const Tweet: FC<ITweetProps> = ({ tweet, isPaused, onLocalPauseChange }) => {
-  //todo metadata, carousel multi image, pause/unpause, profile image
-
   const tweetText = parseTweetText(tweet.text);
-
   const images = useTweetImages(tweet);
 
   return (

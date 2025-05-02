@@ -64,3 +64,10 @@ export interface IAnalysis {
   tokenName: string;
   ticker: string;
 }
+
+export interface ILaunchSuccess {
+  tokenName: string;
+  tickerName: string;
+}
+
+

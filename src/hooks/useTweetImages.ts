@@ -4,7 +4,7 @@ import { getMetadata } from "@/services/metadata";
 
 import { ITweet } from "@/interfaces/index.interface";
 
-export const useTweetImages = (tweet: ITweet) => {
+const useTweetImages = (tweet: ITweet) => {
   const [images, setImages] = useState<string[]>([]);
 
   const getImages = useCallback(async () => {
@@ -12,7 +12,9 @@ export const useTweetImages = (tweet: ITweet) => {
     if (tweet.attachedMedia?.length) setImages(tweet.attachedMedia);
     else if (tweet.attachedUrl) {
       const metadata = await getMetadata(tweet.attachedUrl);
-      if (metadata) setImages([metadata.ogImage]);
+
+      const image = metadata?.ogImage || metadata?.twitterImage;
+      if (image) setImages([image]);
     }
   }, [tweet]);
 
@@ -22,3 +24,5 @@ export const useTweetImages = (tweet: ITweet) => {
 
   return images;
 };
+
+export default useTweetImages;

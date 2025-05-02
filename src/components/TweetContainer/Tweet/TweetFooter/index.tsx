@@ -2,15 +2,16 @@ import { FC, useCallback, useState } from "react";
 
 import styles from "@/components/TweetContainer/Tweet/TweetFooter/index.module.css";
 
-import Copy from "@/icons/Copy";
 import { formatDate } from "@/utils/date";
+
+import Copy from "@/icons/Copy";
 
 interface TweetFooterProps {
   tweetUrl: string;
   tweetDate: string;
 }
 
-export const TweetFooter: FC<TweetFooterProps> = ({ tweetDate, tweetUrl }) => {
+const TweetFooter: FC<TweetFooterProps> = ({ tweetDate, tweetUrl }) => {
   const [copied, setCopied] = useState(false);
 
   const formattedDate = formatDate(tweetDate);
@@ -47,3 +48,5 @@ export const TweetFooter: FC<TweetFooterProps> = ({ tweetDate, tweetUrl }) => {
     </div>
   );
 };
+
+export default TweetFooter;
