@@ -8,7 +8,8 @@ export interface ILaunchSettings {
   walletPublicKey: string;
   walletPrivateKey: string;
   defaultBuyAmount: string;
-  tokenKey: string;
+  tokenPublicKey: string;
+  tokenPrivateKey: string;
 }
 
 export interface IPaused {

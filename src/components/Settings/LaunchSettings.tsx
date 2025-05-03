@@ -17,7 +17,8 @@ const validationSchema = Yup.object().shape({
   walletPublicKey: Yup.string().required("Wallet Public Key is required"),
   walletPrivateKey: Yup.string().required("Wallet Private Key is required"),
   defaultBuyAmount: Yup.string().required("Default Buy Amount is required"),
-  tokenKey: Yup.string().required("Token Key is required"),
+  tokenPrivateKey: Yup.string().required("Token Private Key is required"),
+  tokenPublicKey: Yup.string().required("Token Key is required"),
 });
 
 const LaunchSettings: FC = () => {
@@ -105,15 +106,27 @@ const LaunchSettings: FC = () => {
             </div>
 
             <div className={styles.tokenInputWrapper}>
-              <label className={styles.inputLabel}>Token Key</label>
+              <label className={styles.inputLabel}>Token Private Key</label>
               <Field
-                name="tokenKey"
+                name="tokenPrivateKey"
                 type="text"
-                placeholder="Enter Token Key"
+                placeholder="Enter Token Private Key"
                 className={styles.tokenInput}
               />
-              {errors.tokenKey && touched.tokenKey && (
-                <div className={styles.errorMessage}>{errors.tokenKey}</div>
+              {errors.tokenPrivateKey && touched.tokenPrivateKey && (
+                <div className={styles.errorMessage}>{errors.tokenPrivateKey}</div>
+              )}
+            </div>
+            <div className={styles.tokenInputWrapper}>
+              <label className={styles.inputLabel}>Token Public Key</label>
+              <Field
+                name="tokenPublicKey"
+                type="text"
+                placeholder="Enter Token Public Key"
+                className={styles.tokenInput}
+              />
+              {errors.tokenPublicKey && touched.tokenPublicKey && (
+                <div className={styles.errorMessage}>{errors.tokenPublicKey}</div>
               )}
             </div>
 

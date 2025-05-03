@@ -56,7 +56,7 @@ const ExpressLaunch = ({
         tokenName: analysis.tokenName,
         tickerName: analysis.ticker,
         twitterUrl: tweet.url,
-        tokenKey: launchSettings.tokenKey,
+        tokenKey: launchSettings.tokenPrivateKey,
         buyAmount: Number(launchSettings.defaultBuyAmount) || 0,
         imageUrl: launchImageUrl,
       });

@@ -20,6 +20,7 @@ import {
   ILaunchSuccess,
   IApiSettings,
 } from "@/interfaces/index.interface";
+import environment from "@/constants/environment";
 interface TweetActionsProps {
   onGlobalPauseChange: (isPaused: boolean) => void;
   tweet: ITweet;
@@ -45,7 +46,15 @@ export const TweetActions: FC<TweetActionsProps> = ({
     tweet,
     onGlobalPauseChange,
     launchSettings,
-    onLaunchSuccess: setLaunchSuccess,
+    onLaunchSuccess: (ls:ILaunchSuccess | null) => {
+      setLaunchSuccess(ls);
+
+      const launchUrl = new URL(environment.launchUrl);
+      launchUrl.searchParams.append('chainId', environment.launchChainId);
+      launchUrl.searchParams.append("address", launchSettings.tokenPublicKey)
+
+      window.open(launchUrl.toString(), '_blank', 'noopener,noreferrer');
+    },
   };
 
   return (

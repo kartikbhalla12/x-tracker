@@ -8,5 +8,6 @@ export const DEFAULT_LAUNCH_SETTINGS = {
   walletPublicKey: "",
   walletPrivateKey: "",
   defaultBuyAmount: "",
-  tokenKey: "",
+  tokenPublicKey: "",
+  tokenPrivateKey: "",
 };
