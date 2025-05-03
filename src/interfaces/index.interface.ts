@@ -70,4 +70,9 @@ export interface ILaunchSuccess {
   tickerName: string;
 }
 
+export enum ISocketStatus {
+  CONNECTED,
+  DISCONNECTED
+} 
+
 

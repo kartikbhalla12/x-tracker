@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-import { IApiSettings, ITweet } from "@/interfaces/index.interface";
+import {
+  IApiSettings,
+  ISocketStatus,
+  ITweet,
+} from "@/interfaces/index.interface";
 
 import environment from "@/constants/environment";
 import { STORAGE_KEYS } from "@/constants/storage";
@@ -11,6 +15,10 @@ import storage from "@/utils/storage";
 const useWebSockets = () => {
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [socket, setSocket] = useState<WebSocket | null>(null);
+
+  const [socketStatus, setSocketStatus] = useState<ISocketStatus>(
+    ISocketStatus.DISCONNECTED
+  );
 
   const currentTweetMapRef = useRef<Map<string, ITweet>>(new Map());
 
@@ -26,7 +34,10 @@ const useWebSockets = () => {
     );
 
     setSocket(ws);
-    ws.onopen = () => console.log("Connected to WebSocket");
+    ws.onopen = () => {
+      console.log("Connected to WebSocket");
+      setSocketStatus(ISocketStatus.CONNECTED);
+    };
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
 
@@ -60,8 +71,14 @@ const useWebSockets = () => {
       }
     };
 
-    ws.onclose = () => console.log("Disconnected from WebSocket");
-    ws.onerror = () => alert("Failed to connect to WebSocket");
+    ws.onclose = () => {
+      console.log("Disconnected from WebSocket");
+      setSocketStatus(ISocketStatus.DISCONNECTED);
+    };
+    ws.onerror = () => {
+      console.log("Failed to connect to WebSocket");
+      setSocketStatus(ISocketStatus.DISCONNECTED);
+    };
 
     return () => {
       ws.close();
@@ -78,7 +95,7 @@ const useWebSockets = () => {
     socket.send(JSON.stringify({ type: "resume" }));
   }, [socket]);
 
-  return { tweets, pause, resume };
+  return { tweets, pause, resume, socketStatus };
 };
 
 export default useWebSockets;

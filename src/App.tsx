@@ -16,7 +16,7 @@ function App() {
     local: false,
   });
 
-  const { tweets, pause, resume } = useWebSockets();
+  const { tweets, pause, resume, socketStatus } = useWebSockets();
 
   const paused = isPaused.global || isPaused.local;
 
@@ -32,6 +32,7 @@ function App() {
         onPauseToggle={() =>
           setIsPaused({ ...isPaused, global: !isPaused.global })
         }
+        socketStatus={socketStatus}
       />
 
       {tweets.length > 0 && (

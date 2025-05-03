@@ -30,3 +30,42 @@
 .statusChip:hover {
   opacity: 0.9;
 }
+
+
+.wsChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  color: #374151;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+
+.connected {
+  background-color: #153727;
+  color: #89ffdd;
+
+}
+
+.connectedDot {
+  background-color: #10b981;
+}
+
+.disconnected {
+  color: #ffb7b7;
+  background-color: #3e1a1a;
+}
+
+.disconnectedDot {
+  background-color: #ef4444;
+}
