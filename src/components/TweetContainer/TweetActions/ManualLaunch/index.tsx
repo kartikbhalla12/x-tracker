@@ -43,7 +43,7 @@ const ManualLaunch = ({
       <LaunchTokenPopup
         isOpen={popupOpen}
         onClose={() => setPopupOpen(false)}
-        onAddToken={async ({ imageUrl, name, ticker }) => {
+        onAddToken={async ({ imageUrl, name, ticker, buyAmount }) => {
           const response = await launchToken({
             publicKey: launchSettings.walletPublicKey,
             privateKey: launchSettings.walletPrivateKey,
@@ -51,7 +51,8 @@ const ManualLaunch = ({
             tickerName: ticker,
             twitterUrl: tweet.url,
             tokenKey: launchSettings.tokenPrivateKey,
-            buyAmount: Number(launchSettings.defaultBuyAmount) || 0,
+            buyAmount:
+              Number(buyAmount) || Number(launchSettings.defaultBuyAmount) || 0,
             imageUrl: imageUrl,
           });
 
@@ -61,6 +62,7 @@ const ManualLaunch = ({
           }
         }}
         tweet={tweet}
+        defaultBuyAmount={launchSettings.defaultBuyAmount}
       />
     </div>
   );

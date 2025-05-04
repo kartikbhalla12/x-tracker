@@ -22,6 +22,8 @@ interface ExpressLaunchProps {
   launchSettings: ILaunchSettings;
 
   onLaunchSuccess: (launchSuccess: ILaunchSuccess) => void;
+  title: string;
+  buyAmount?: number;
 }
 
 const ExpressLaunch = ({
@@ -30,6 +32,8 @@ const ExpressLaunch = ({
   openAIKey,
   launchSettings,
   onLaunchSuccess,
+  title,
+  buyAmount,
 }: ExpressLaunchProps) => {
   const [isLaunchLoading, setIsLaunchLoading] = useState(false);
 
@@ -57,7 +61,7 @@ const ExpressLaunch = ({
         tickerName: analysis.ticker,
         twitterUrl: tweet.url,
         tokenKey: launchSettings.tokenPrivateKey,
-        buyAmount: Number(launchSettings.defaultBuyAmount) || 0,
+        buyAmount: buyAmount || Number(launchSettings.defaultBuyAmount) || 0,
         imageUrl: launchImageUrl,
       });
 
@@ -79,7 +83,7 @@ const ExpressLaunch = ({
         ) : (
           <>
             <Zap className={styles.launchIcon} />
-            Express AI Launch
+            {title}
           </>
         )}
       </button>

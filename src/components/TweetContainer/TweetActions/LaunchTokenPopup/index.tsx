@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import ImageView from "@/components/TweetContainer/ImageView";
-import styles from '@/components/TweetContainer/TweetActions/LaunchTokenPopup/index.module.css';
+import styles from "@/components/TweetContainer/TweetActions/LaunchTokenPopup/index.module.css";
 
 import { getImageUrlForLaunch, parseTweetText } from "@/utils/tweet";
 
@@ -14,15 +14,19 @@ import { ITweet, IAnalysis } from "@/interfaces/index.interface";
 import Cross from "@/icons/Cross";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Token name is required'),
-  ticker: Yup.string().required('Ticker symbol is required'),
-  imageUrl: Yup.string().url('Must be a valid URL').required('Image URL is required'),
+  name: Yup.string().required("Token name is required"),
+  ticker: Yup.string().required("Ticker symbol is required"),
+  imageUrl: Yup.string()
+    .url("Must be a valid URL")
+    .required("Image URL is required"),
+  buyAmount: Yup.string().required("Buy Amount is required"),
 });
 
 interface FormValues {
   name: string;
   ticker: string;
   imageUrl: string;
+  buyAmount: string;
 }
 
 interface LaunchTokenPopupProps {
@@ -32,7 +36,8 @@ interface LaunchTokenPopupProps {
   tweet: ITweet;
   analysis?: IAnalysis | null;
   loading?: boolean;
-} 
+  defaultBuyAmount: string;
+}
 const LaunchTokenPopup = ({
   isOpen,
   onClose,
@@ -40,12 +45,14 @@ const LaunchTokenPopup = ({
   tweet,
   analysis,
   loading,
+  defaultBuyAmount,
 }: LaunchTokenPopupProps) => {
   const formik = useFormik({
     initialValues: {
-      name: '',
-      ticker: '',
-      imageUrl: '',
+      name: "",
+      ticker: "",
+      imageUrl: "",
+      buyAmount: "",
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -59,32 +66,33 @@ const LaunchTokenPopup = ({
       const imageUrlForLaunch = await getImageUrlForLaunch(tweet);
       if (imageUrlForLaunch) {
         formik.setValues({
-          name: analysis?.tokenName || '',
-          ticker: analysis?.ticker || '',
+          name: analysis?.tokenName || "",
+          ticker: analysis?.ticker || "",
           imageUrl: imageUrlForLaunch,
-        })
+          buyAmount: defaultBuyAmount,
+        });
       }
-    }
+    };
     setImageUrl();
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tweet, analysis]);
 
   const images = useTweetImages(tweet);
-  const parsedTweetText = parseTweetText(tweet.text.slice(0, 500) + '...');
+  const parsedTweetText = parseTweetText(tweet.text.slice(0, 500) + "...");
 
   if (!isOpen) return null;
 
   return (
     <div className={styles.popupOverlay}>
       <div className={styles.popupContent}>
-        {
-          loading ? (
-            <div className={styles.loadingOverlay}>
-              <div className={styles.loadingSpinner}></div>
-            </div>
-          ) : <></>
-        }
+        {loading ? (
+          <div className={styles.loadingOverlay}>
+            <div className={styles.loadingSpinner}></div>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className={styles.popupLeft}>
           <div className={styles.popupHeader}>
             <h2>Launch Token</h2>
@@ -95,7 +103,9 @@ const LaunchTokenPopup = ({
               <div className={styles.tweetMedia}>
                 <ImageView images={images} alt="Media" />
               </div>
-            ) : <></>}
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className={styles.popupRight}>
@@ -118,7 +128,7 @@ const LaunchTokenPopup = ({
                     <button
                       type="button"
                       className={styles.clearButton}
-                      onClick={() => formik.setFieldValue('name', '')}
+                      onClick={() => formik.setFieldValue("name", "")}
                       disabled={formik.isSubmitting}
                     >
                       <Cross />
@@ -126,7 +136,9 @@ const LaunchTokenPopup = ({
                   )}
                 </div>
                 {formik.touched.name && formik.errors.name && (
-                  <div className={styles.errorMessage}>{formik.errors.name}</div>
+                  <div className={styles.errorMessage}>
+                    {formik.errors.name}
+                  </div>
                 )}
               </div>
 
@@ -147,15 +159,37 @@ const LaunchTokenPopup = ({
                     <button
                       type="button"
                       className={styles.clearButton}
-                      onClick={() => formik.setFieldValue('ticker', '')}
+                      onClick={() => formik.setFieldValue("ticker", "")}
                       disabled={formik.isSubmitting}
                     >
-                     <Cross/>
+                      <Cross />
                     </button>
                   )}
                 </div>
                 {formik.touched.ticker && formik.errors.ticker && (
-                  <div className={styles.errorMessage}>{formik.errors.ticker}</div>
+                  <div className={styles.errorMessage}>
+                    {formik.errors.ticker}
+                  </div>
+                )}
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="ticker">Buy Amount</label>
+                <div className={styles.tokenNameInputWrapper}>
+                  <input
+                    type="text"
+                    id="buyAmount"
+                    name="buyAmount"
+                    value={formik.values.buyAmount}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    placeholder="Enter Buy Amount"
+                    disabled={formik.isSubmitting}
+                  />
+                </div>
+                {formik.touched.ticker && formik.errors.ticker && (
+                  <div className={styles.errorMessage}>
+                    {formik.errors.ticker}
+                  </div>
                 )}
               </div>
 
@@ -172,7 +206,9 @@ const LaunchTokenPopup = ({
                   disabled={formik.isSubmitting}
                 />
                 {formik.touched.imageUrl && formik.errors.imageUrl && (
-                  <div className={styles.errorMessage}>{formik.errors.imageUrl}</div>
+                  <div className={styles.errorMessage}>
+                    {formik.errors.imageUrl}
+                  </div>
                 )}
               </div>
 
@@ -189,10 +225,14 @@ const LaunchTokenPopup = ({
             </div>
 
             <div className={styles.formActions}>
-              <button type="button" className={styles.cancelButton} onClick={() => {
-                formik.resetForm()
-                onClose();
-              }}>
+              <button
+                type="button"
+                className={styles.cancelButton}
+                onClick={() => {
+                  formik.resetForm();
+                  onClose();
+                }}
+              >
                 Cancel
               </button>
               <button
@@ -200,7 +240,7 @@ const LaunchTokenPopup = ({
                 className={styles.submitButton}
                 disabled={formik.isSubmitting}
               >
-                {formik.isSubmitting ? 'Launching...' : 'Launch Token'}
+                {formik.isSubmitting ? "Launching..." : "Launch Token"}
               </button>
             </div>
           </form>

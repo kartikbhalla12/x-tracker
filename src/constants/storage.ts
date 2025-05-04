@@ -1,5 +1,5 @@
 export const STORAGE_KEYS = {
   API_SETTINGS: "@apiSettingsConfig",
-  LAUNCH_SETTINGS: "@launchSettingsConfigV2",
+  LAUNCH_SETTINGS: "@launchSettingsConfigV3",
 }
 

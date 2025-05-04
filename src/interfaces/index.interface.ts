@@ -8,6 +8,8 @@ export interface ILaunchSettings {
   walletPublicKey: string;
   walletPrivateKey: string;
   defaultBuyAmount: string;
+  express1BuyAmount: string;
+  express2BuyAmount: string;
   tokenPublicKey: string;
   tokenPrivateKey: string;
 }

@@ -17,6 +17,8 @@ const validationSchema = Yup.object().shape({
   walletPublicKey: Yup.string().required("Wallet Public Key is required"),
   walletPrivateKey: Yup.string().required("Wallet Private Key is required"),
   defaultBuyAmount: Yup.string().required("Default Buy Amount is required"),
+  express1BuyAmount: Yup.string().required("Express 1 Buy Amount is required"),
+  express2BuyAmount: Yup.string().required("Express 2 Buy Amount is required"),
   tokenPrivateKey: Yup.string().required("Token Private Key is required"),
   tokenPublicKey: Yup.string().required("Token Key is required"),
 });
@@ -104,6 +106,34 @@ const LaunchSettings: FC = () => {
                 </div>
               )}
             </div>
+            <div className={styles.tokenInputWrapper}>
+              <label className={styles.inputLabel}>Express 1 Buy Amount</label>
+              <Field
+                name="express1BuyAmount"
+                type="text"
+                placeholder="Enter Express 1 Buy Amount"
+                className={styles.tokenInput}
+              />
+              {errors.express1BuyAmount && touched.express1BuyAmount && (
+                <div className={styles.errorMessage}>
+                  {errors.express1BuyAmount}
+                </div>
+              )}
+            </div>
+            <div className={styles.tokenInputWrapper}>
+              <label className={styles.inputLabel}>Express 2 Buy Amount</label>
+              <Field
+                name="express2BuyAmount"
+                type="text"
+                placeholder="Enter Express 2 Buy Amount"
+                className={styles.tokenInput}
+              />
+              {errors.express2BuyAmount && touched.express2BuyAmount && (
+                <div className={styles.errorMessage}>
+                  {errors.express2BuyAmount}
+                </div>
+              )}
+            </div>
 
             <div className={styles.tokenInputWrapper}>
               <label className={styles.inputLabel}>Token Private Key</label>
@@ -114,7 +144,9 @@ const LaunchSettings: FC = () => {
                 className={styles.tokenInput}
               />
               {errors.tokenPrivateKey && touched.tokenPrivateKey && (
-                <div className={styles.errorMessage}>{errors.tokenPrivateKey}</div>
+                <div className={styles.errorMessage}>
+                  {errors.tokenPrivateKey}
+                </div>
               )}
             </div>
             <div className={styles.tokenInputWrapper}>
@@ -126,7 +158,9 @@ const LaunchSettings: FC = () => {
                 className={styles.tokenInput}
               />
               {errors.tokenPublicKey && touched.tokenPublicKey && (
-                <div className={styles.errorMessage}>{errors.tokenPublicKey}</div>
+                <div className={styles.errorMessage}>
+                  {errors.tokenPublicKey}
+                </div>
               )}
             </div>
 

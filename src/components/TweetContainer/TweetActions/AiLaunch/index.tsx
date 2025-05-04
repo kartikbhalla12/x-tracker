@@ -62,7 +62,7 @@ const AiLaunch = ({
       <LaunchTokenPopup
         isOpen={popupOpen}
         onClose={() => setPopupOpen(false)}
-        onAddToken={async ({ imageUrl, name, ticker }) => {
+        onAddToken={async ({ imageUrl, name, ticker, buyAmount }) => {
           const response = await launchToken({
             publicKey: launchSettings.walletPublicKey,
             privateKey: launchSettings.walletPrivateKey,
@@ -70,7 +70,8 @@ const AiLaunch = ({
             tickerName: ticker,
             twitterUrl: tweet.url,
             tokenKey: launchSettings.tokenPrivateKey,
-            buyAmount: Number(launchSettings.defaultBuyAmount) || 0,
+            buyAmount:
+              Number(buyAmount) || Number(launchSettings.defaultBuyAmount) || 0,
             imageUrl: imageUrl,
           });
 
@@ -83,6 +84,7 @@ const AiLaunch = ({
         tweet={tweet}
         analysis={analysis}
         loading={isLaunchLoading}
+        defaultBuyAmount={launchSettings.defaultBuyAmount}
       />
     </div>
   );
