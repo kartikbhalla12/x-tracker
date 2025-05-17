@@ -64,9 +64,6 @@ const ExpressParseLaunch = ({
     if (!analysis || !launchImageUrl) {
       setIsLaunchLoading(false);
     } else {
-      alert(
-        `Launching token ${analysis.tokenName} with ticker ${analysis.ticker}`
-      );
       const response = await launchToken({
         publicKey: launchSettings.walletPublicKey,
         privateKey: launchSettings.walletPrivateKey,
