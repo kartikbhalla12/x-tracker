@@ -134,7 +134,12 @@ export const TweetActions: FC<TweetActionsProps> = ({
       </div>
       <div className={styles.tweetActionsRow}>
         <ManualLaunch {...commonProps} tweet={tweet} />
-        <ExpressParseLaunch {...commonProps} title="Exp Parse" tweet={tweet} />
+        <ExpressParseLaunch
+          {...commonProps}
+          title="Exp Parse"
+          tweet={tweet}
+          buyAmount={Number(launchSettings.express1BuyAmount)}
+        />
       </div>
 
       <LaunchSuccess
