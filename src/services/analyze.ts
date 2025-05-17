@@ -30,8 +30,6 @@ export const analyzeTweet = async ({
       }
     );
 
-    console.log(response.data);
-
     return response.data?.analysis || null;
   } catch (error) {
     console.error(error);

@@ -3,17 +3,16 @@
   color: #EEE4B1;
   border: none;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  width: 120px;
-  height: 100px;
+  width: 100px;
+  height: 50px;
   transition: all 0.2s;
-  flex-direction: column;
-  line-height: 1.25rem;
+  flex-shrink: 1;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
@@ -23,4 +22,9 @@
 .launchIcon {
   width: 16px;
   height: 16px;
+}
+
+.launchText {
+  font-size: 14px;
+  font-weight: 600;
 }

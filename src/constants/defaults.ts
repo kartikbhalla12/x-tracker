@@ -9,7 +9,7 @@ export const DEFAULT_LAUNCH_SETTINGS = {
   walletPrivateKey: "",
   defaultBuyAmount: "",
   express1BuyAmount: "",
-  express2BuyAmount:"",
+  express2BuyAmount: "",
   tokenPublicKey: "",
   tokenPrivateKey: "",
 };

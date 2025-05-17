@@ -1,6 +1,6 @@
 import { getMetadata } from "@/services/metadata";
 
-import { ITweet } from "@/interfaces/index.interface";
+import { IInnerTweet, ITweet } from "@/interfaces/index.interface";
 
 export const parseTweetText = (text: string) =>
   text.split(" ").map((word, index) => {
@@ -29,10 +29,9 @@ export const getImageUrlToAnalyze = async (tweet: ITweet) => {
     return tweet.inReplyToTweet.attachedMedia?.[0];
   if (tweet.quotedTweet && tweet.quotedTweet.attachedMedia?.length)
     return tweet.quotedTweet.attachedMedia?.[0];
-  
+
   return null;
 };
-
 
 export const getImageUrlForLaunch = async (tweet: ITweet) => {
   const imageUrl = await getImageUrlToAnalyze(tweet);
@@ -40,7 +39,19 @@ export const getImageUrlForLaunch = async (tweet: ITweet) => {
 
   const authorPicture = tweet.author.profilePicture;
 
-  if(authorPicture) return authorPicture;
+  if (authorPicture) return authorPicture;
 
   return null;
 };
+
+export const mapInternalTweet = (innerTweet: IInnerTweet) => ({
+  ...innerTweet,
+  inReplyToTweet: null,
+  quotedTweet: null,
+});
+
+export const getTweetText = async (tweetText: string) =>
+  tweetText
+    .split(" ")
+    .filter((word) => !word.trim().startsWith("http"))
+    .join(" ");

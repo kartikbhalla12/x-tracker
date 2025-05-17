@@ -16,9 +16,15 @@ interface ITweetProps {
   tweet: ITweet;
   isPaused: IPaused;
   onLocalPauseChange: (isPaused: boolean) => void;
+  onGlobalPauseChange: (isPaused: boolean) => void;
 }
 
-const Tweet: FC<ITweetProps> = ({ tweet, isPaused, onLocalPauseChange }) => {
+const Tweet: FC<ITweetProps> = ({
+  tweet,
+  isPaused,
+  onLocalPauseChange,
+  onGlobalPauseChange,
+}) => {
   const tweetText = parseTweetText(tweet.text);
   const images = useTweetImages(tweet);
 
@@ -29,6 +35,7 @@ const Tweet: FC<ITweetProps> = ({ tweet, isPaused, onLocalPauseChange }) => {
       onMouseEnter={() => !isPaused.global && onLocalPauseChange(true)}
       onMouseLeave={() => !isPaused.global && onLocalPauseChange(false)}
       onClick={() => {
+        onGlobalPauseChange(true);
         window.open(tweet.url, "_blank");
       }}
     >
@@ -55,6 +62,7 @@ const Tweet: FC<ITweetProps> = ({ tweet, isPaused, onLocalPauseChange }) => {
         <InnerTweet
           tweet={tweet.inReplyToTweet}
           type={InnerTweetType.replied}
+          onGlobalPauseChange={onGlobalPauseChange}
         />
       ) : (
         <></>
@@ -72,7 +80,11 @@ const Tweet: FC<ITweetProps> = ({ tweet, isPaused, onLocalPauseChange }) => {
         )}
 
         {tweet.quotedTweet ? (
-          <InnerTweet tweet={tweet.quotedTweet} type={InnerTweetType.quoted} />
+          <InnerTweet
+            tweet={tweet.quotedTweet}
+            type={InnerTweetType.quoted}
+            onGlobalPauseChange={onGlobalPauseChange}
+          />
         ) : (
           <></>
         )}

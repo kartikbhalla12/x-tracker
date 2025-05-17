@@ -1,24 +1,23 @@
 import { useState } from "react";
 
-import { analyzeTweet } from "@/services/analyze";
 import { launchToken } from "@/services/launchToken";
 
-import { getImageUrlForLaunch, getImageUrlToAnalyze } from "@/utils/tweet";
+import { getImageUrlForLaunch, getTweetText } from "@/utils/tweet";
 
-import styles from "@/components/TweetContainer/TweetActions/ExpressLaunch/index.module.css";
+import styles from "@/components/TweetContainer/TweetActions/ExpressParseLaunch/index.module.css";
 
 import {
   ITweet,
   ILaunchSettings,
   ILaunchSuccess,
+  IAnalysis,
 } from "@/interfaces/index.interface";
 
 import Zap from "@/icons/Zap";
 
-interface ExpressLaunchProps {
-  tweet: ITweet | null;
+interface ExpressParseLaunchProps {
+  tweet: ITweet;
   onGlobalPauseChange: (isPaused: boolean) => void;
-  openAIKey: string;
   launchSettings: ILaunchSettings;
 
   onLaunchSuccess: (launchSuccess: ILaunchSuccess) => void;
@@ -26,36 +25,48 @@ interface ExpressLaunchProps {
   buyAmount?: number;
 }
 
-const ExpressLaunch = ({
+const ExpressParseLaunch = ({
   tweet,
   onGlobalPauseChange,
-  openAIKey,
   launchSettings,
   onLaunchSuccess,
   title,
   buyAmount,
-}: ExpressLaunchProps) => {
+}: ExpressParseLaunchProps) => {
   const [isLaunchLoading, setIsLaunchLoading] = useState(false);
-
-  if (!tweet) return null;
 
   const handleLaunch = async () => {
     onGlobalPauseChange(true);
     setIsLaunchLoading(true);
 
-    const imageUrl = await getImageUrlToAnalyze(tweet);
+    let analysis: IAnalysis | null = null;
+    const tweetText = await getTweetText(tweet.text);
+    const tokenName = tweetText.substring(0, 35);
 
-    const analysis = await analyzeTweet({
-      text: tweet.text,
-      imageUrl: imageUrl,
-      openAIKey,
-    });
+    if (tweetText.length <= 10) {
+      analysis = {
+        tokenName,
+        ticker: tweetText.toUpperCase().split(" ").join(""),
+      };
+    } else {
+      analysis = {
+        tokenName,
+        ticker: tweetText
+          .split(" ")
+          .reduce((acc, word) => acc + word.trim().charAt(0), "")
+          .toUpperCase()
+          .substring(0, 10),
+      };
+    }
 
     const launchImageUrl = await getImageUrlForLaunch(tweet);
 
     if (!analysis || !launchImageUrl) {
       setIsLaunchLoading(false);
     } else {
+      alert(
+        `Launching token ${analysis.tokenName} with ticker ${analysis.ticker}`
+      );
       const response = await launchToken({
         publicKey: launchSettings.walletPublicKey,
         privateKey: launchSettings.walletPrivateKey,
@@ -93,4 +104,4 @@ const ExpressLaunch = ({
   );
 };
 
-export default ExpressLaunch;
+export default ExpressParseLaunch;

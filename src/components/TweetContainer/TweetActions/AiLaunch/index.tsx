@@ -18,7 +18,8 @@ import {
 import Link from "@/icons/Link";
 
 interface AiLaunchProps {
-  tweet: ITweet;
+  title: string;
+  tweet: ITweet | null;
   onGlobalPauseChange: (isPaused: boolean) => void;
   openAIKey: string;
   launchSettings: ILaunchSettings;
@@ -31,10 +32,13 @@ const AiLaunch = ({
   openAIKey,
   launchSettings,
   onLaunchSuccess,
+  title,
 }: AiLaunchProps) => {
   const [isLaunchLoading, setIsLaunchLoading] = useState(false);
   const [analysis, setAnalysis] = useState<IAnalysis | null>(null);
   const [popupOpen, setPopupOpen] = useState(false);
+
+  if (!tweet) return null;
 
   const handleLaunch = async () => {
     onGlobalPauseChange(true);
@@ -56,7 +60,7 @@ const AiLaunch = ({
     <div>
       <button className={styles.launchButton} onClick={handleLaunch}>
         <Link className={styles.launchIcon} />
-        AI Launch
+        <span className={styles.launchText}>{title}</span>
       </button>
 
       <LaunchTokenPopup

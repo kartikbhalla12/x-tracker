@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styles from "@/components/TweetContainer/TweetActions/LaunchSuccess/index.module.css";
+
+import { STORAGE_KEYS } from "@/constants/storage";
+import { DEFAULT_LAUNCH_SETTINGS } from "@/constants/defaults";
+
+import storage from "@/utils/storage";
+
+import { ILaunchSettings } from "@/interfaces/index.interface";
 
 import SuccessIcon from "@/icons/Success";
 
@@ -17,6 +24,20 @@ const LaunchSuccess: React.FC<LaunchSuccessProps> = ({
   onClose,
   open,
 }) => {
+  useEffect(() => {
+    if (open) {
+      const launchSettings =
+        storage.get<ILaunchSettings>(STORAGE_KEYS.LAUNCH_SETTINGS) ||
+        DEFAULT_LAUNCH_SETTINGS;
+
+      storage.set(STORAGE_KEYS.LAUNCH_SETTINGS, {
+        ...launchSettings,
+        tokenPublicKey: "",
+        tokenPrivateKey: "",
+      });
+    }
+  }, [open]);
+
   if (!open) return null;
 
   return (

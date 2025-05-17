@@ -75,7 +75,5 @@ export interface ILaunchSuccess {
 
 export enum ISocketStatus {
   CONNECTED,
-  DISCONNECTED
-} 
-
-
+  DISCONNECTED,
+}

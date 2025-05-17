@@ -31,7 +31,17 @@ const LaunchSettings: FC = () => {
     DEFAULT_LAUNCH_SETTINGS;
 
   const handleSubmit = (values: ILaunchSettings) => {
-    storage.set(STORAGE_KEYS.LAUNCH_SETTINGS, values);
+    const trimmedValues: ILaunchSettings = {
+      walletPublicKey: values.walletPublicKey.trim(),
+      walletPrivateKey: values.walletPrivateKey.trim(),
+      defaultBuyAmount: values.defaultBuyAmount.trim(),
+      express1BuyAmount: values.express1BuyAmount.trim(),
+      express2BuyAmount: values.express2BuyAmount.trim(),
+      tokenPrivateKey: values.tokenPrivateKey.trim(),
+      tokenPublicKey: values.tokenPublicKey.trim(),
+    };
+
+    storage.set(STORAGE_KEYS.LAUNCH_SETTINGS, trimmedValues);
     window.location.reload();
   };
 

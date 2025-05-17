@@ -14,7 +14,7 @@ import {
 import User from "@/icons/User";
 
 interface ManualLaunchProps {
-  tweet: ITweet;
+  tweet: ITweet | null;
   onGlobalPauseChange: (isPaused: boolean) => void;
   launchSettings: ILaunchSettings;
   onLaunchSuccess: (launchSuccess: ILaunchSuccess) => void;
@@ -28,6 +28,8 @@ const ManualLaunch = ({
 }: ManualLaunchProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
 
+  if (!tweet) return null;
+
   const handleLaunch = async () => {
     onGlobalPauseChange(true);
     setPopupOpen(true);
@@ -37,7 +39,7 @@ const ManualLaunch = ({
     <div>
       <button className={styles.launchButton} onClick={handleLaunch}>
         <User className={styles.launchIcon} />
-        Manual Launch
+        <span className={styles.launchText}>Manual</span>
       </button>
 
       <LaunchTokenPopup

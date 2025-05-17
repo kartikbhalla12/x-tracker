@@ -22,10 +22,17 @@ const validationSchema = Yup.object().shape({
 const ConfigSettings: FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const config = storage.get<IApiSettings>(STORAGE_KEYS.API_SETTINGS) || DEFAULT_API_SETTINGS;
+  const config =
+    storage.get<IApiSettings>(STORAGE_KEYS.API_SETTINGS) ||
+    DEFAULT_API_SETTINGS;
 
   const handleSubmit = (values: IApiSettings) => {
-    storage.set(STORAGE_KEYS.API_SETTINGS, values);
+    const trimmedValues = {
+      apiToken: values.apiToken.trim(),
+      listId: values.listId.trim(),
+      openAIKey: values.openAIKey.trim(),
+    };
+    storage.set(STORAGE_KEYS.API_SETTINGS, trimmedValues);
     window.location.reload();
   };
 

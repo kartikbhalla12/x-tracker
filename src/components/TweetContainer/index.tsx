@@ -24,8 +24,14 @@ const TweetContainer: FC<TweetContainerProps> = ({
       tweet={tweet}
       isPaused={isPaused}
       onLocalPauseChange={onLocalPauseChange}
+      onGlobalPauseChange={onGlobalPauseChange}
     />
-    <TweetActions onGlobalPauseChange={onGlobalPauseChange} tweet={tweet} />
+    <TweetActions
+      onGlobalPauseChange={onGlobalPauseChange}
+      tweet={tweet}
+      isPaused={isPaused}
+      onLocalPauseChange={onLocalPauseChange}
+    />
   </div>
 );
 

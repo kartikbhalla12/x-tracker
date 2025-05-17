@@ -22,9 +22,9 @@ const storage = {
       localStorage.removeItem(key);
     } catch (error) {
       console.error("Error removing item from localStorage:", error);
-    } 
+    }
   },
-  
+
   clear: (): void => {
     try {
       localStorage.clear();

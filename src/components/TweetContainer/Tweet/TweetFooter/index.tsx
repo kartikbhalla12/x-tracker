@@ -16,12 +16,15 @@ const TweetFooter: FC<TweetFooterProps> = ({ tweetDate, tweetUrl }) => {
 
   const formattedDate = formatDate(tweetDate);
 
-  const handleCopyUrl = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigator.clipboard.writeText(tweetUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [tweetUrl]);
+  const handleCopyUrl = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(tweetUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    },
+    [tweetUrl]
+  );
 
   return (
     <div className={styles.tweetFooter}>

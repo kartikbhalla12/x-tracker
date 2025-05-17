@@ -11,9 +11,14 @@ import { InnerTweetType, IInnerTweet } from "@/interfaces/index.interface";
 interface InnerTweetProps {
   tweet: IInnerTweet;
   type: InnerTweetType;
+  onGlobalPauseChange: (isPaused: boolean) => void;
 }
 
-const InnerTweet: FC<InnerTweetProps> = ({ tweet, type }) => {
+const InnerTweet: FC<InnerTweetProps> = ({
+  tweet,
+  type,
+  onGlobalPauseChange,
+}) => {
   const { attachedMedia, author, text, url } = tweet;
 
   return (
@@ -21,6 +26,7 @@ const InnerTweet: FC<InnerTweetProps> = ({ tweet, type }) => {
       className={styles.innerTweet}
       onClick={(e) => {
         e.stopPropagation();
+        onGlobalPauseChange(true);
         window.open(url, "_blank");
       }}
     >
