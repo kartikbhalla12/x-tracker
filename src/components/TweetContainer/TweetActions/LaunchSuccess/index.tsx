@@ -10,7 +10,6 @@ import storage from "@/utils/storage";
 import { ILaunchSettings } from "@/interfaces/index.interface";
 
 import SuccessIcon from "@/icons/Success";
-
 interface LaunchSuccessProps {
   tokenName: string;
   tickerName: string;

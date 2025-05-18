@@ -3,8 +3,9 @@ import axios from "axios";
 import environment from "@/constants/environment";
 
 interface ILaunchToken {
-  publicKey: string;
-  privateKey: string;
+  // publicKey: string;
+  // privateKey: string;
+  walletApiKey: string;
   tokenName: string;
   tickerName: string;
   twitterUrl: string;
@@ -14,8 +15,9 @@ interface ILaunchToken {
 }
 
 export const launchToken = async ({
-  publicKey,
-  privateKey,
+  // publicKey,
+  // privateKey,
+  walletApiKey,
   tokenName,
   tickerName,
   twitterUrl,
@@ -25,8 +27,9 @@ export const launchToken = async ({
 }: ILaunchToken) => {
   try {
     const response = await axios.post(`${environment.apiUrl}/launch`, {
-      publicKey,
-      privateKey,
+      // publicKey,
+      // privateKey,
+      apiKey: walletApiKey,
       tokenName,
       tickerName,
       twitterUrl,

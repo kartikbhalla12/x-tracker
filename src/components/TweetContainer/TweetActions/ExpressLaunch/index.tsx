@@ -57,8 +57,9 @@ const ExpressLaunch = ({
       setIsLaunchLoading(false);
     } else {
       const response = await launchToken({
-        publicKey: launchSettings.walletPublicKey,
-        privateKey: launchSettings.walletPrivateKey,
+        // publicKey: launchSettings.walletPublicKey,
+        // privateKey: launchSettings.walletPrivateKey,
+        walletApiKey: launchSettings.walletApiKey,
         tokenName: analysis.tokenName,
         tickerName: analysis.ticker,
         twitterUrl: tweet.url,

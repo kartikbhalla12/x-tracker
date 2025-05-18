@@ -14,8 +14,9 @@ import Zap from "@/icons/Zap";
 import { ILaunchSettings } from "@/interfaces/index.interface";
 
 const validationSchema = Yup.object().shape({
-  walletPublicKey: Yup.string().required("Wallet Public Key is required"),
-  walletPrivateKey: Yup.string().required("Wallet Private Key is required"),
+  // walletPublicKey: Yup.string().required("Wallet Public Key is required"),
+  // walletPrivateKey: Yup.string().required("Wallet Private Key is required"),
+  walletApiKey: Yup.string().required("Wallet API Key is required"),
   defaultBuyAmount: Yup.string().required("Default Buy Amount is required"),
   express1BuyAmount: Yup.string().required("Express 1 Buy Amount is required"),
   express2BuyAmount: Yup.string().required("Express 2 Buy Amount is required"),
@@ -32,8 +33,9 @@ const LaunchSettings: FC = () => {
 
   const handleSubmit = (values: ILaunchSettings) => {
     const trimmedValues: ILaunchSettings = {
-      walletPublicKey: values.walletPublicKey.trim(),
-      walletPrivateKey: values.walletPrivateKey.trim(),
+      // walletPublicKey: values.walletPublicKey.trim(),
+      // walletPrivateKey: values.walletPrivateKey.trim(),
+      walletApiKey: values.walletApiKey.trim(),
       defaultBuyAmount: values.defaultBuyAmount.trim(),
       express1BuyAmount: values.express1BuyAmount.trim(),
       express2BuyAmount: values.express2BuyAmount.trim(),
@@ -73,21 +75,21 @@ const LaunchSettings: FC = () => {
           <Form className={styles.configSettingsInput}>
             <h1>Launch Settings</h1>
             <div className={styles.tokenInputWrapper}>
-              <label className={styles.inputLabel}>Wallet Public Key</label>
+              <label className={styles.inputLabel}>Wallet API Key</label>
               <Field
-                name="walletPublicKey"
+                name="walletApiKey"
                 type="text"
-                placeholder="Enter Wallet Public Key"
+                placeholder="Enter Wallet API Key"
                 className={styles.tokenInput}
               />
-              {errors.walletPublicKey && touched.walletPublicKey && (
+              {errors.walletApiKey && touched.walletApiKey && (
                 <div className={styles.errorMessage}>
-                  {errors.walletPublicKey}
+                  {errors.walletApiKey}
                 </div>
               )}
             </div>
 
-            <div className={styles.tokenInputWrapper}>
+            {/* <div className={styles.tokenInputWrapper}>
               <label className={styles.inputLabel}>Wallet Private Key</label>
               <Field
                 name="walletPrivateKey"
@@ -100,7 +102,7 @@ const LaunchSettings: FC = () => {
                   {errors.walletPrivateKey}
                 </div>
               )}
-            </div>
+            </div> */}
 
             <div className={styles.tokenInputWrapper}>
               <label className={styles.inputLabel}>Default Buy Amount</label>

@@ -59,6 +59,14 @@ export const TweetActions: FC<TweetActionsProps> = ({
       launchUrl.searchParams.append("chainId", environment.launchChainId);
       launchUrl.searchParams.append("address", launchSettings.tokenPublicKey);
 
+      const launch2Url = new URL(environment.launch2Url);
+    
+      window.open(
+        launch2Url.toString() +
+        `/${launchSettings.tokenPublicKey}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
       window.open(launchUrl.toString(), "_blank", "noopener,noreferrer");
     },
   };

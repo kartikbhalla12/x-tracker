@@ -68,8 +68,9 @@ const AiLaunch = ({
         onClose={() => setPopupOpen(false)}
         onAddToken={async ({ imageUrl, name, ticker, buyAmount }) => {
           const response = await launchToken({
-            publicKey: launchSettings.walletPublicKey,
-            privateKey: launchSettings.walletPrivateKey,
+            // publicKey: launchSettings.walletPublicKey,
+            // privateKey: launchSettings.walletPrivateKey,
+            walletApiKey: launchSettings.walletApiKey,
             tokenName: name,
             tickerName: ticker,
             twitterUrl: tweet.url,

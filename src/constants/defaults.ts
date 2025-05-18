@@ -5,8 +5,9 @@ export const DEFAULT_API_SETTINGS = {
 };
 
 export const DEFAULT_LAUNCH_SETTINGS = {
-  walletPublicKey: "",
-  walletPrivateKey: "",
+  // walletPublicKey: "",
+  // walletPrivateKey: "",
+  walletApiKey: "",
   defaultBuyAmount: "",
   express1BuyAmount: "",
   express2BuyAmount: "",
