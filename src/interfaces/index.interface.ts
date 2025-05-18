@@ -2,8 +2,6 @@ export interface IApiSettings {
   apiToken: string;
   listId: string;
   openAIKey: string;
-  podId: string;
-  modelName: string;
 }
 
 export interface ILaunchSettings {

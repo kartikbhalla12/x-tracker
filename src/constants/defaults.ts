@@ -2,8 +2,6 @@ export const DEFAULT_API_SETTINGS = {
   apiToken: "",
   listId: "",
   openAIKey: "",
-  podId: "",
-  modelName: "",
 };
 
 export const DEFAULT_LAUNCH_SETTINGS = {

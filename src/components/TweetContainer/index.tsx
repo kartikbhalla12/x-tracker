@@ -42,13 +42,12 @@ const TweetContainer: FC<TweetContainerProps> = ({
         STORAGE_KEYS.API_SETTINGS
       );
 
-      if (!configSettings?.podId || !configSettings?.modelName) return;
+      if (!configSettings?.openAIKey) return;
 
       const analysis = await customAnalyzeTweet({
         text: trimTweetText(tweet.text),
         imageUrl: image || null,
-        podId: configSettings?.podId,
-        modelName: configSettings?.modelName,
+        openAIKey: configSettings.openAIKey,
       });
 
       setCustomAnalysis(analysis);
