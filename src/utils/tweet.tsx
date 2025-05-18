@@ -50,7 +50,7 @@ export const mapInternalTweet = (innerTweet: IInnerTweet) => ({
   quotedTweet: null,
 });
 
-export const getTweetText = async (tweetText: string) =>
+export const trimTweetText = (tweetText: string) =>
   tweetText
     .split(" ")
     .filter((word) => !word.trim().startsWith("http"))

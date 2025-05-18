@@ -1,10 +1,19 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import TweetActions from "@/components/TweetContainer/TweetActions";
 import Tweet from "@/components/TweetContainer/Tweet";
 import styles from "@/components/TweetContainer/index.module.css";
 
-import { IPaused, ITweet } from "@/interfaces/index.interface";
+import {
+  IAnalysis,
+  IApiSettings,
+  IPaused,
+  ITweet,
+} from "@/interfaces/index.interface";
+import { customAnalyzeTweet } from "@/services/customAnalyze";
+import { getImageUrlToAnalyze, trimTweetText } from "@/utils/tweet";
+import storage from "@/utils/storage";
+import { STORAGE_KEYS } from "@/constants/storage";
 
 interface TweetContainerProps {
   tweet: ITweet;
@@ -18,21 +27,53 @@ const TweetContainer: FC<TweetContainerProps> = ({
   isPaused,
   onLocalPauseChange,
   onGlobalPauseChange,
-}) => (
-  <div className={styles.tweetContainer}>
-    <Tweet
-      tweet={tweet}
-      isPaused={isPaused}
-      onLocalPauseChange={onLocalPauseChange}
-      onGlobalPauseChange={onGlobalPauseChange}
-    />
-    <TweetActions
-      onGlobalPauseChange={onGlobalPauseChange}
-      tweet={tweet}
-      isPaused={isPaused}
-      onLocalPauseChange={onLocalPauseChange}
-    />
-  </div>
-);
+}) => {
+  const [customAnalysis, setCustomAnalysis] = useState<IAnalysis | null>(null);
+  const [customAnalysisLoading, setCustomAnalysisLoading] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      setCustomAnalysisLoading(true);
+      const image = await getImageUrlToAnalyze(tweet);
+      if (!tweet) return setCustomAnalysisLoading(false);
+
+      const configSettings = storage.get<IApiSettings>(
+        STORAGE_KEYS.API_SETTINGS
+      );
+
+      if (!configSettings?.podId || !configSettings?.modelName) return;
+
+      const analysis = await customAnalyzeTweet({
+        text: trimTweetText(tweet.text),
+        imageUrl: image || null,
+        podId: configSettings?.podId,
+        modelName: configSettings?.modelName,
+      });
+
+      setCustomAnalysis(analysis);
+      setCustomAnalysisLoading(false);
+    })();
+  }, [tweet]);
+
+  return (
+    <div className={styles.tweetContainer}>
+      <Tweet
+        tweet={tweet}
+        isPaused={isPaused}
+        onLocalPauseChange={onLocalPauseChange}
+        onGlobalPauseChange={onGlobalPauseChange}
+      />
+      <TweetActions
+        onGlobalPauseChange={onGlobalPauseChange}
+        tweet={tweet}
+        isPaused={isPaused}
+        onLocalPauseChange={onLocalPauseChange}
+        customAnalysis={customAnalysis}
+        customAnalysisLoading={customAnalysisLoading}
+      />
+    </div>
+  );
+};
 
 export default TweetContainer;

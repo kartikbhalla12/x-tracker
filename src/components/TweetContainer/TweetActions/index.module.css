@@ -1,10 +1,9 @@
 .tweetActions {
-  display: flex;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 0.5rem;
 }
 
-.tweetActionsRow {
-  display: flex;
-  gap: 0.5rem;
-  flex-direction: column;
+.customAiExpress {
+  grid-column: span 4;
 }

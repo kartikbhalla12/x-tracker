@@ -3,7 +3,11 @@ import { useState } from "react";
 import { analyzeTweet } from "@/services/analyze";
 import { launchToken } from "@/services/launchToken";
 
-import { getImageUrlForLaunch, getImageUrlToAnalyze } from "@/utils/tweet";
+import {
+  getImageUrlForLaunch,
+  getImageUrlToAnalyze,
+  trimTweetText,
+} from "@/utils/tweet";
 
 import styles from "@/components/TweetContainer/TweetActions/ExpressLaunch/index.module.css";
 
@@ -46,7 +50,7 @@ const ExpressLaunch = ({
     const imageUrl = await getImageUrlToAnalyze(tweet);
 
     const analysis = await analyzeTweet({
-      text: tweet.text,
+      text: trimTweetText(tweet.text),
       imageUrl: imageUrl,
       openAIKey,
     });

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { launchToken } from "@/services/launchToken";
 
-import { getImageUrlForLaunch, getTweetText } from "@/utils/tweet";
+import { getImageUrlForLaunch, trimTweetText } from "@/utils/tweet";
 
 import styles from "@/components/TweetContainer/TweetActions/ExpressParseLaunch/index.module.css";
 
@@ -40,7 +40,7 @@ const ExpressParseLaunch = ({
     setIsLaunchLoading(true);
 
     let analysis: IAnalysis | null = null;
-    const tweetText = await getTweetText(tweet.text);
+    const tweetText = trimTweetText(tweet.text);
     const tokenName = tweetText.substring(0, 35);
 
     if (tweetText.length <= 10) {

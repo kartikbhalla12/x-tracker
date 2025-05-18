@@ -3,7 +3,7 @@ import { useState } from "react";
 import { analyzeTweet } from "@/services/analyze";
 import { launchToken } from "@/services/launchToken";
 
-import { getImageUrlToAnalyze } from "@/utils/tweet";
+import { getImageUrlToAnalyze, trimTweetText } from "@/utils/tweet";
 
 import LaunchTokenPopup from "@/components/TweetContainer/TweetActions/LaunchTokenPopup";
 import styles from "@/components/TweetContainer/TweetActions/AiLaunch/index.module.css";
@@ -47,7 +47,7 @@ const AiLaunch = ({
 
     setPopupOpen(true);
     const analysis = await analyzeTweet({
-      text: tweet.text,
+      text: trimTweetText(tweet.text),
       imageUrl: imageUrl,
       openAIKey,
     });

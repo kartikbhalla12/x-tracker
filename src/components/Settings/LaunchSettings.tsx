@@ -83,9 +83,7 @@ const LaunchSettings: FC = () => {
                 className={styles.tokenInput}
               />
               {errors.walletApiKey && touched.walletApiKey && (
-                <div className={styles.errorMessage}>
-                  {errors.walletApiKey}
-                </div>
+                <div className={styles.errorMessage}>{errors.walletApiKey}</div>
               )}
             </div>
 

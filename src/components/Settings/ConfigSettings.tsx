@@ -17,6 +17,8 @@ const validationSchema = Yup.object().shape({
   apiToken: Yup.string().required("API Token is required"),
   listId: Yup.string().required("List ID is required"),
   openAIKey: Yup.string().required("OpenAI API Key is required"),
+  podId: Yup.string().required("Pod ID is required"),
+  modelName: Yup.string().required("Model Name is required"),
 });
 
 const ConfigSettings: FC = () => {
@@ -31,6 +33,8 @@ const ConfigSettings: FC = () => {
       apiToken: values.apiToken.trim(),
       listId: values.listId.trim(),
       openAIKey: values.openAIKey.trim(),
+      podId: values.podId.trim(),
+      modelName: values.modelName.trim(),
     };
     storage.set(STORAGE_KEYS.API_SETTINGS, trimmedValues);
     window.location.reload();
@@ -95,6 +99,32 @@ const ConfigSettings: FC = () => {
               />
               {errors.openAIKey && touched.openAIKey && (
                 <div className={styles.errorMessage}>{errors.openAIKey}</div>
+              )}
+            </div>
+
+            <div className={styles.tokenInputWrapper}>
+              <label className={styles.inputLabel}>Pod ID</label>
+              <Field
+                name="podId"
+                type="text"
+                placeholder="Enter Pod ID"
+                className={styles.tokenInput}
+              />
+              {errors.podId && touched.podId && (
+                <div className={styles.errorMessage}>{errors.podId}</div>
+              )}
+            </div>
+
+            <div className={styles.tokenInputWrapper}>
+              <label className={styles.inputLabel}>Model Name</label>
+              <Field
+                name="modelName"
+                type="text"
+                placeholder="Enter Model Name"
+                className={styles.tokenInput}
+              />
+              {errors.modelName && touched.modelName && (
+                <div className={styles.errorMessage}>{errors.modelName}</div>
               )}
             </div>
 

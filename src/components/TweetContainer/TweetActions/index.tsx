@@ -23,12 +23,16 @@ import {
   ILaunchSuccess,
   IApiSettings,
   IPaused,
+  IAnalysis,
 } from "@/interfaces/index.interface";
+import CustomAiExpressLaunch from "./CustomAiExpressLaunch";
 interface TweetActionsProps {
   onGlobalPauseChange: (isPaused: boolean) => void;
   tweet: ITweet;
   isPaused: IPaused;
   onLocalPauseChange: (isPaused: boolean) => void;
+  customAnalysis: IAnalysis | null;
+  customAnalysisLoading: boolean;
 }
 
 export const TweetActions: FC<TweetActionsProps> = ({
@@ -36,6 +40,8 @@ export const TweetActions: FC<TweetActionsProps> = ({
   onGlobalPauseChange,
   isPaused,
   onLocalPauseChange,
+  customAnalysis,
+  customAnalysisLoading,
 }) => {
   const [launchSuccess, setLaunchSuccess] = useState<ILaunchSuccess | null>(
     null
@@ -60,10 +66,9 @@ export const TweetActions: FC<TweetActionsProps> = ({
       launchUrl.searchParams.append("address", launchSettings.tokenPublicKey);
 
       const launch2Url = new URL(environment.launch2Url);
-    
+
       window.open(
-        launch2Url.toString() +
-        `/${launchSettings.tokenPublicKey}`,
+        launch2Url.toString() + `/${launchSettings.tokenPublicKey}`,
         "_blank",
         "noopener,noreferrer"
       );
@@ -88,31 +93,54 @@ export const TweetActions: FC<TweetActionsProps> = ({
       onMouseEnter={() => !isPaused.global && onLocalPauseChange(true)}
       onMouseLeave={() => !isPaused.global && onLocalPauseChange(false)}
     >
-      <div className={styles.tweetActionsRow}>
-        <AiLaunch
+      <ManualLaunch {...commonProps} tweet={tweet} />
+      <AiLaunch
+        {...commonProps}
+        openAIKey={openAIKey}
+        title="AI"
+        tweet={tweet}
+      />
+
+      <ExpressLaunch
+        {...commonProps}
+        openAIKey={openAIKey}
+        title="Exp 1"
+        buyAmount={Number(launchSettings.express1BuyAmount)}
+        tweet={tweet}
+      />
+
+      <ExpressLaunch
+        {...commonProps}
+        openAIKey={openAIKey}
+        title="Exp 2"
+        buyAmount={Number(launchSettings.express2BuyAmount)}
+        tweet={tweet}
+      />
+
+      <div className={styles.customAiExpress}>
+        <CustomAiExpressLaunch
           {...commonProps}
-          openAIKey={openAIKey}
-          title="AI"
+          customAnalysis={customAnalysis}
+          customAnalysisLoading={customAnalysisLoading}
           tweet={tweet}
         />
-        {hasInternalTweet && (
+      </div>
+      <ExpressParseLaunch
+        {...commonProps}
+        title="Exp Parse"
+        tweet={tweet}
+        buyAmount={Number(launchSettings.express1BuyAmount)}
+      />
+
+      {hasInternalTweet && (
+        <>
           <AiLaunch
             {...commonProps}
             openAIKey={openAIKey}
             title="R AI"
             tweet={internalTweet}
           />
-        )}
-      </div>
-      <div className={styles.tweetActionsRow}>
-        <ExpressLaunch
-          {...commonProps}
-          openAIKey={openAIKey}
-          title="Exp 1"
-          buyAmount={Number(launchSettings.express1BuyAmount)}
-          tweet={tweet}
-        />
-        {hasInternalTweet && (
+
           <ExpressLaunch
             {...commonProps}
             openAIKey={openAIKey}
@@ -120,17 +148,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
             buyAmount={Number(launchSettings.express1BuyAmount)}
             tweet={internalTweet}
           />
-        )}
-      </div>
-      <div className={styles.tweetActionsRow}>
-        <ExpressLaunch
-          {...commonProps}
-          openAIKey={openAIKey}
-          title="Exp 2"
-          buyAmount={Number(launchSettings.express2BuyAmount)}
-          tweet={tweet}
-        />
-        {hasInternalTweet && (
+
           <ExpressLaunch
             {...commonProps}
             openAIKey={openAIKey}
@@ -138,17 +156,8 @@ export const TweetActions: FC<TweetActionsProps> = ({
             buyAmount={Number(launchSettings.express2BuyAmount)}
             tweet={internalTweet}
           />
-        )}
-      </div>
-      <div className={styles.tweetActionsRow}>
-        <ManualLaunch {...commonProps} tweet={tweet} />
-        <ExpressParseLaunch
-          {...commonProps}
-          title="Exp Parse"
-          tweet={tweet}
-          buyAmount={Number(launchSettings.express1BuyAmount)}
-        />
-      </div>
+        </>
+      )}
 
       <LaunchSuccess
         tokenName={launchSuccess?.tokenName || ""}

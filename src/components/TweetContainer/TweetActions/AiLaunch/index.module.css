@@ -9,7 +9,7 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  width: 100px;
+  width: 120px;
   height: 50px;
   transition: all 0.2s;
   flex-shrink: 1;
