@@ -13,7 +13,7 @@ import { DEFAULT_API_SETTINGS } from "@/constants/defaults";
 import storage from "@/utils/storage";
 
 const useWebSockets = () => {
-  const [tweets, setTweets] = useState<ITweet[]>([]);
+  const [tweetIds, setTweetIds] = useState<string[]>([]);
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   const [socketStatus, setSocketStatus] = useState<ISocketStatus>(
@@ -21,6 +21,11 @@ const useWebSockets = () => {
   );
 
   const currentTweetMapRef = useRef<Map<string, ITweet>>(new Map());
+
+  // Getter function to retrieve tweet by ID
+  const getTweetById = useCallback((id: string) => {
+    return currentTweetMapRef.current.get(id);
+  }, []);
 
   useEffect(() => {
     const apiSettings =
@@ -64,7 +69,8 @@ const useWebSockets = () => {
 
         if (changed.length > 0 || removed.length > 0) {
           currentTweetMapRef.current = newTweetMap;
-          setTweets([...newTweetMap.values()]);
+          // Only update the array of IDs - stable references to actual tweets
+          setTweetIds([...newTweetMap.keys()]);
         }
       } else if (message.type === "tweet-error") {
         alert("Error fetching tweets. Check your credits.");
@@ -95,7 +101,7 @@ const useWebSockets = () => {
     socket.send(JSON.stringify({ type: "resume" }));
   }, [socket]);
 
-  return { tweets, pause, resume, socketStatus };
+  return { tweetIds, getTweetById, pause, resume, socketStatus };
 };
 
 export default useWebSockets;

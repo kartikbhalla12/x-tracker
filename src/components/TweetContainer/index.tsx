@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 
 import TweetActions from "@/components/TweetContainer/TweetActions";
 import Tweet from "@/components/TweetContainer/Tweet";
@@ -53,7 +53,7 @@ const TweetContainer: FC<TweetContainerProps> = ({
       setCustomAnalysis(analysis);
       setCustomAnalysisLoading(false);
     })();
-  }, [tweet]);
+  }, []);
 
   return (
     <div className={styles.tweetContainer}>
@@ -75,4 +75,4 @@ const TweetContainer: FC<TweetContainerProps> = ({
   );
 };
 
-export default TweetContainer;
+export default memo(TweetContainer);

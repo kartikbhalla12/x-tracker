@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Settings from "@/components/Settings";
-import TweetContainer from "@/components/TweetContainer";
+import TweetItem from "@/components/TweetContainer/TweetItem";
 import Header from "@/components/Header";
 
 import useWebSockets from "@/hooks/useWebSockets";
@@ -16,7 +16,7 @@ function App() {
     local: false,
   });
 
-  const { tweets, pause, resume, socketStatus } = useWebSockets();
+  const { tweetIds, getTweetById, pause, resume, socketStatus } = useWebSockets();
 
   const paused = isPaused.global || isPaused.local;
 
@@ -35,12 +35,13 @@ function App() {
         socketStatus={socketStatus}
       />
 
-      {tweets.length > 0 && (
+      {tweetIds.length > 0 && (
         <div className="tweets-container">
-          {tweets.map((tweet) => (
-            <TweetContainer
-              key={tweet.id}
-              tweet={tweet}
+          {tweetIds.map((tweetId) => (
+            <TweetItem
+              key={tweetId}
+              tweetId={tweetId}
+              getTweetById={getTweetById}
               isPaused={isPaused}
               onLocalPauseChange={(paused) =>
                 setIsPaused({ ...isPaused, local: paused })
