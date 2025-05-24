@@ -19,7 +19,7 @@ const TweetItem: FC<TweetItemProps> = ({
   onGlobalPauseChange,
 }) => {
   const tweet = getTweetById(tweetId);
-  
+
   if (!tweet) return null;
 
   return (
@@ -33,4 +33,4 @@ const TweetItem: FC<TweetItemProps> = ({
   );
 };
 
-export default memo(TweetItem); 
+export default memo(TweetItem);

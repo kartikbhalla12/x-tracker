@@ -13,12 +13,14 @@ interface ICustomAnalyzeTweet {
   text: string | null;
   imageUrl: string | null;
   openAIKey: string;
+  openAIModel: string;
 }
 
 export const customAnalyzeTweet = async ({
   text,
   imageUrl,
   openAIKey,
+  openAIModel,
 }: ICustomAnalyzeTweet) => {
   try {
     const response = await axios.post<ICustomAnalyzeResponse>(
@@ -27,6 +29,7 @@ export const customAnalyzeTweet = async ({
         tweetText: text,
         tweetImageUrl: imageUrl,
         openAIKey,
+        model: openAIModel,
       }
     );
 

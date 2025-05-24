@@ -16,7 +16,8 @@ function App() {
     local: false,
   });
 
-  const { tweetIds, getTweetById, pause, resume, socketStatus } = useWebSockets();
+  const { tweetIds, getTweetById, pause, resume, socketStatus } =
+    useWebSockets();
 
   const paused = isPaused.global || isPaused.local;
 

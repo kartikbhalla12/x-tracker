@@ -33,6 +33,7 @@ interface TweetActionsProps {
   onLocalPauseChange: (isPaused: boolean) => void;
   customAnalysis: IAnalysis | null;
   customAnalysisLoading: boolean;
+  ipfsMetadataUri: string | null;
 }
 
 export const TweetActions: FC<TweetActionsProps> = ({
@@ -42,6 +43,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
   onLocalPauseChange,
   customAnalysis,
   customAnalysisLoading,
+  ipfsMetadataUri,
 }) => {
   const [launchSuccess, setLaunchSuccess] = useState<ILaunchSuccess | null>(
     null
@@ -93,12 +95,17 @@ export const TweetActions: FC<TweetActionsProps> = ({
       onMouseEnter={() => !isPaused.global && onLocalPauseChange(true)}
       onMouseLeave={() => !isPaused.global && onLocalPauseChange(false)}
     >
-      <ManualLaunch {...commonProps} tweet={tweet} />
+      <ManualLaunch
+        {...commonProps}
+        tweet={tweet}
+        ipfsMetadataUri={ipfsMetadataUri}
+      />
       <AiLaunch
         {...commonProps}
         openAIKey={openAIKey}
         title="AI"
         tweet={tweet}
+        ipfsMetadataUri={ipfsMetadataUri}
       />
 
       <ExpressLaunch
@@ -107,6 +114,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
         title="Exp 1"
         buyAmount={Number(launchSettings.express1BuyAmount)}
         tweet={tweet}
+        ipfsMetadataUri={ipfsMetadataUri}
       />
 
       <ExpressLaunch
@@ -115,6 +123,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
         title="Exp 2"
         buyAmount={Number(launchSettings.express2BuyAmount)}
         tweet={tweet}
+        ipfsMetadataUri={ipfsMetadataUri}
       />
 
       <div className={styles.customAiExpress}>
@@ -123,6 +132,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
           customAnalysis={customAnalysis}
           customAnalysisLoading={customAnalysisLoading}
           tweet={tweet}
+          ipfsMetadataUri={ipfsMetadataUri}
         />
       </div>
       <ExpressParseLaunch
@@ -130,6 +140,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
         title="Exp Parse"
         tweet={tweet}
         buyAmount={Number(launchSettings.express1BuyAmount)}
+        ipfsMetadataUri={ipfsMetadataUri}
       />
 
       {hasInternalTweet && (
@@ -139,6 +150,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
             openAIKey={openAIKey}
             title="R AI"
             tweet={internalTweet}
+            ipfsMetadataUri={ipfsMetadataUri}
           />
 
           <ExpressLaunch
@@ -147,6 +159,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
             title="R Exp 1"
             buyAmount={Number(launchSettings.express1BuyAmount)}
             tweet={internalTweet}
+            ipfsMetadataUri={ipfsMetadataUri}
           />
 
           <ExpressLaunch
@@ -155,6 +168,7 @@ export const TweetActions: FC<TweetActionsProps> = ({
             title="R Exp 2"
             buyAmount={Number(launchSettings.express2BuyAmount)}
             tweet={internalTweet}
+            ipfsMetadataUri={ipfsMetadataUri}
           />
         </>
       )}

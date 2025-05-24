@@ -11,10 +11,14 @@ import {
   ITweet,
 } from "@/interfaces/index.interface";
 import { customAnalyzeTweet } from "@/services/customAnalyze";
-import { getImageUrlToAnalyze, trimTweetText } from "@/utils/tweet";
+import {
+  getImageUrlForLaunch,
+  getImageUrlToAnalyze,
+  trimTweetText,
+} from "@/utils/tweet";
 import storage from "@/utils/storage";
 import { STORAGE_KEYS } from "@/constants/storage";
-
+import { getIpfsMetadataUri } from "@/services/getIpfs";
 interface TweetContainerProps {
   tweet: ITweet;
   isPaused: IPaused;
@@ -32,6 +36,8 @@ const TweetContainer: FC<TweetContainerProps> = ({
   const [customAnalysisLoading, setCustomAnalysisLoading] =
     useState<boolean>(false);
 
+  const [ipfsMetadataUri, setIpfsMetadataUri] = useState<string | null>(null);
+
   useEffect(() => {
     (async () => {
       setCustomAnalysisLoading(true);
@@ -44,14 +50,41 @@ const TweetContainer: FC<TweetContainerProps> = ({
 
       if (!configSettings?.openAIKey) return;
 
+      const tweetText = `
+      Tweet: ${trimTweetText(tweet.text)}
+      Quoted Tweet: ${
+        tweet.quotedTweet?.text ? trimTweetText(tweet.quotedTweet.text) : "None"
+      }
+      Replied To Tweet: ${
+        tweet.inReplyToTweet?.text
+          ? trimTweetText(tweet.inReplyToTweet.text)
+          : "None"
+      }
+      `;
+
       const analysis = await customAnalyzeTweet({
-        text: trimTweetText(tweet.text),
+        text: tweetText,
         imageUrl: image || null,
         openAIKey: configSettings.openAIKey,
+        openAIModel: configSettings.openAIModel,
       });
 
       setCustomAnalysis(analysis);
       setCustomAnalysisLoading(false);
+
+      const launchImageUrl = await getImageUrlForLaunch(tweet);
+      if (!launchImageUrl || !analysis) return;
+
+      const metadataUri = await getIpfsMetadataUri({
+        imageUrl: launchImageUrl,
+        tickerName: analysis.ticker,
+        tokenName: analysis.tokenName,
+        twitterUrl: tweet.url,
+      });
+
+      if (!metadataUri) return;
+
+      setIpfsMetadataUri(metadataUri);
     })();
   }, []);
 
@@ -70,6 +103,7 @@ const TweetContainer: FC<TweetContainerProps> = ({
         onLocalPauseChange={onLocalPauseChange}
         customAnalysis={customAnalysis}
         customAnalysisLoading={customAnalysisLoading}
+        ipfsMetadataUri={ipfsMetadataUri}
       />
     </div>
   );

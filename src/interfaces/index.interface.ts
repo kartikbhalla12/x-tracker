@@ -2,15 +2,19 @@ export interface IApiSettings {
   apiToken: string;
   listId: string;
   openAIKey: string;
+  openAIModel: string;
 }
 
 export interface ILaunchSettings {
   walletApiKey: string;
+  walletPublicKey: string;
+  walletPrivateKey: string;
   defaultBuyAmount: string;
   express1BuyAmount: string;
   express2BuyAmount: string;
   tokenPublicKey: string;
   tokenPrivateKey: string;
+  launchType: ILaunchType;
 }
 
 export interface IPaused {
@@ -75,4 +79,9 @@ export interface ILaunchSuccess {
 export enum ISocketStatus {
   CONNECTED,
   DISCONNECTED,
+}
+
+export enum ILaunchType {
+  LOCAL = "local",
+  LIGHTNING = "lightning",
 }

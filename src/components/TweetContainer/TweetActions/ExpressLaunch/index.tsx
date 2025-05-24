@@ -3,11 +3,7 @@ import { useState } from "react";
 import { analyzeTweet } from "@/services/analyze";
 import { launchToken } from "@/services/launchToken";
 
-import {
-  getImageUrlForLaunch,
-  getImageUrlToAnalyze,
-  trimTweetText,
-} from "@/utils/tweet";
+import { getImageUrlToAnalyze, trimTweetText } from "@/utils/tweet";
 
 import styles from "@/components/TweetContainer/TweetActions/ExpressLaunch/index.module.css";
 
@@ -28,6 +24,7 @@ interface ExpressLaunchProps {
   onLaunchSuccess: (launchSuccess: ILaunchSuccess) => void;
   title: string;
   buyAmount?: number;
+  ipfsMetadataUri: string | null;
 }
 
 const ExpressLaunch = ({
@@ -38,6 +35,7 @@ const ExpressLaunch = ({
   onLaunchSuccess,
   title,
   buyAmount,
+  ipfsMetadataUri,
 }: ExpressLaunchProps) => {
   const [isLaunchLoading, setIsLaunchLoading] = useState(false);
 
@@ -55,31 +53,31 @@ const ExpressLaunch = ({
       openAIKey,
     });
 
-    const launchImageUrl = await getImageUrlForLaunch(tweet);
+    // const launchImageUrl = await getImageUrlForLaunch(tweet);
 
-    if (!analysis || !launchImageUrl) {
-      setIsLaunchLoading(false);
-    } else {
-      const response = await launchToken({
-        // publicKey: launchSettings.walletPublicKey,
-        // privateKey: launchSettings.walletPrivateKey,
-        walletApiKey: launchSettings.walletApiKey,
+    if (!analysis || !ipfsMetadataUri) return setIsLaunchLoading(false);
+
+    const response = await launchToken({
+      publicKey: launchSettings.walletPublicKey,
+      privateKey: launchSettings.walletPrivateKey,
+      walletApiKey: launchSettings.walletApiKey,
+      tokenName: analysis.tokenName,
+      tickerName: analysis.ticker,
+      // twitterUrl: tweet.url,
+      tokenKey: launchSettings.tokenPrivateKey,
+      buyAmount: buyAmount || Number(launchSettings.defaultBuyAmount) || 0,
+      // imageUrl: launchImageUrl,
+      metadataUri: ipfsMetadataUri,
+      launchType: launchSettings.launchType,
+    });
+
+    if (response) {
+      onLaunchSuccess({
         tokenName: analysis.tokenName,
         tickerName: analysis.ticker,
-        twitterUrl: tweet.url,
-        tokenKey: launchSettings.tokenPrivateKey,
-        buyAmount: buyAmount || Number(launchSettings.defaultBuyAmount) || 0,
-        imageUrl: launchImageUrl,
       });
-
-      if (response) {
-        onLaunchSuccess({
-          tokenName: analysis.tokenName,
-          tickerName: analysis.ticker,
-        });
-      }
-      setIsLaunchLoading(false);
     }
+    setIsLaunchLoading(false);
   };
 
   return (

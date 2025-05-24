@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { launchToken } from "@/services/launchToken";
 
-import { getImageUrlForLaunch, trimTweetText } from "@/utils/tweet";
+import { trimTweetText } from "@/utils/tweet";
 
 import styles from "@/components/TweetContainer/TweetActions/ExpressParseLaunch/index.module.css";
 
@@ -23,6 +23,7 @@ interface ExpressParseLaunchProps {
   onLaunchSuccess: (launchSuccess: ILaunchSuccess) => void;
   title: string;
   buyAmount?: number;
+  ipfsMetadataUri: string | null;
 }
 
 const ExpressParseLaunch = ({
@@ -32,6 +33,7 @@ const ExpressParseLaunch = ({
   onLaunchSuccess,
   title,
   buyAmount,
+  ipfsMetadataUri,
 }: ExpressParseLaunchProps) => {
   const [isLaunchLoading, setIsLaunchLoading] = useState(false);
 
@@ -59,21 +61,22 @@ const ExpressParseLaunch = ({
       };
     }
 
-    const launchImageUrl = await getImageUrlForLaunch(tweet);
+    // const launchImageUrl = await getImageUrlForLaunch(tweet);
 
-    if (!analysis || !launchImageUrl) {
+    if (!analysis || !ipfsMetadataUri) {
       setIsLaunchLoading(false);
     } else {
       const response = await launchToken({
-        // publicKey: launchSettings.walletPublicKey,
-        // privateKey: launchSettings.walletPrivateKey,
+        publicKey: launchSettings.walletPublicKey,
+        privateKey: launchSettings.walletPrivateKey,
         walletApiKey: launchSettings.walletApiKey,
         tokenName: analysis.tokenName,
         tickerName: analysis.ticker,
-        twitterUrl: tweet.url,
+        // twitterUrl: tweet.url,
         tokenKey: launchSettings.tokenPrivateKey,
         buyAmount: buyAmount || Number(launchSettings.defaultBuyAmount) || 0,
-        imageUrl: launchImageUrl,
+        metadataUri: ipfsMetadataUri,
+        launchType: launchSettings.launchType,
       });
 
       if (response) {

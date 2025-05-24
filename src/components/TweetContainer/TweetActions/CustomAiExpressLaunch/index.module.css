@@ -1,3 +1,9 @@
+.customAiExpress {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
 .tokenButton {
   background-color: rgba(255, 255, 255, 0.1) !important;
   color: #4CAF50;
@@ -8,15 +14,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  width: calc(480px + 1.5rem);
+  /* cursor: pointer; */
+  width: calc(420px + 1rem);
   height: 50px;
   transition: all 0.2s;
   flex-shrink: 1;
 
-  &:hover {
+  /* &:hover {
     background-color: rgba(255, 255, 255, 0.2) !important;
-  }
+  } */
 }
 
 .tokenInfo {
@@ -65,4 +71,26 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.addButton {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 60px;
+  height: 50px;
+  transition: all 0.2s;
+  flex-shrink: 1;
+}
+
+.addButton svg {
+  width: 24px;
+  height: 24px;
 }

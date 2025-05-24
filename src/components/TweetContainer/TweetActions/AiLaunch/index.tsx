@@ -24,6 +24,7 @@ interface AiLaunchProps {
   openAIKey: string;
   launchSettings: ILaunchSettings;
   onLaunchSuccess: (launchSuccess: ILaunchSuccess) => void;
+  ipfsMetadataUri: string | null;
 }
 
 const AiLaunch = ({
@@ -33,6 +34,7 @@ const AiLaunch = ({
   launchSettings,
   onLaunchSuccess,
   title,
+  ipfsMetadataUri,
 }: AiLaunchProps) => {
   const [isLaunchLoading, setIsLaunchLoading] = useState(false);
   const [analysis, setAnalysis] = useState<IAnalysis | null>(null);
@@ -66,18 +68,23 @@ const AiLaunch = ({
       <LaunchTokenPopup
         isOpen={popupOpen}
         onClose={() => setPopupOpen(false)}
-        onAddToken={async ({ imageUrl, name, ticker, buyAmount }) => {
+        onAddToken={async ({ name, ticker, buyAmount }) => {
+          //TODO use imageUrl from form
+
+          if (!ipfsMetadataUri) return;
+
           const response = await launchToken({
-            // publicKey: launchSettings.walletPublicKey,
-            // privateKey: launchSettings.walletPrivateKey,
+            publicKey: launchSettings.walletPublicKey,
+            privateKey: launchSettings.walletPrivateKey,
             walletApiKey: launchSettings.walletApiKey,
             tokenName: name,
             tickerName: ticker,
-            twitterUrl: tweet.url,
+            // twitterUrl: tweet.url,
             tokenKey: launchSettings.tokenPrivateKey,
             buyAmount:
               Number(buyAmount) || Number(launchSettings.defaultBuyAmount) || 0,
-            imageUrl: imageUrl,
+            metadataUri: ipfsMetadataUri,
+            launchType: launchSettings.launchType,
           });
 
           if (response) {
